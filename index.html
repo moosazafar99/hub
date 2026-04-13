@@ -6,204 +6,227 @@
   <title>Moosa Zafar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:     #f4f2ec;
-      --text:   #111009;
-      --muted:  #9a9890;
-      --border: #e0ddd5;
-      --serif:  'Cormorant', Georgia, serif;
-      --sans:   'Syne', sans-serif;
+      --bg: #050504; --text: #ede8df; --muted: #3a3832;
+      --border: #131210; --accent: #c9a96e; --a2: #8a7d6b;
+      --serif: 'Cormorant', Georgia, serif; --sans: 'Syne', sans-serif;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg:     #0d0c0a;
-        --text:   #e8e4db;
-        --muted:  #6a6760;
-        --border: #1e1d1a;
-      }
+    @media (prefers-color-scheme: light) {
+      :root { --bg:#f2efe8; --text:#0c0b09; --muted:#8a8780; --border:#dedad2; --accent:#9a7a45; --a2:#7a6a50; }
+    }
+    html { font-size:16px; -webkit-font-smoothing:antialiased; }
+    body { background:var(--bg); color:var(--text); font-family:var(--sans); min-height:100vh; cursor:none; overflow-x:hidden; }
+
+    #bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+    #grain { position:fixed; inset:-50%; width:200%; height:200%; z-index:1; pointer-events:none; opacity:.03; animation:gr .4s steps(2) infinite; }
+    @keyframes gr { 0%{transform:translate(0,0)} 25%{transform:translate(-1%,-2%)} 50%{transform:translate(2%,1%)} 75%{transform:translate(-2%,2%)} }
+
+    #cdot { width:6px; height:6px; background:var(--accent); border-radius:50%; position:fixed; z-index:500; pointer-events:none; transform:translate(-50%,-50%); }
+    #cring { width:36px; height:36px; border:1px solid rgba(201,169,110,.3); border-radius:50%; position:fixed; z-index:499; pointer-events:none; transform:translate(-50%,-50%); transition:width .25s,height .25s,border-color .25s; }
+    #cring.big { width:58px; height:58px; border-color:rgba(201,169,110,.55); }
+    @media (prefers-color-scheme: light) {
+      #cring { border-color:rgba(154,122,69,.3); }
+      #cring.big { border-color:rgba(154,122,69,.55); }
     }
 
-    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      opacity: 0;
-      animation: fadein 0.6s ease 0.1s forwards;
-    }
-    @keyframes fadein { to { opacity: 1; } }
+    #pre { position:fixed; inset:0; background:var(--bg); z-index:400; display:flex; flex-direction:column; justify-content:flex-end; padding:2.5rem 3rem 2rem; gap:1.2rem; transition:opacity .7s ease; }
+    #pre.out { opacity:0; pointer-events:none; }
+    .plbl { font-size:.58rem; color:var(--muted); letter-spacing:.18em; text-transform:uppercase; }
+    #pbarw { width:100%; height:1px; background:var(--muted); }
+    #pbar  { height:100%; background:var(--accent); width:0%; transition:width .05s linear; }
+    #pnum  { font-family:var(--serif); font-size:7rem; font-weight:300; line-height:1; }
+    .ppct  { font-size:.8rem; color:var(--a2); margin-left:4px; vertical-align:.6rem; }
 
-    /* ── NAV ── */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.75rem 3rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-name {
-      font-family: var(--serif);
-      font-size: 1.05rem;
-      font-weight: 400;
-      letter-spacing: 0.01em;
-    }
-    .nav-tag {
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
+    .cm { position:fixed; width:14px; height:14px; z-index:2; opacity:.15; }
+    .cm::before,.cm::after { content:''; position:absolute; background:var(--text); }
+    .cm::before { width:1px; height:100%; left:50%; transform:translateX(-50%); }
+    .cm::after  { width:100%; height:1px; top:50%; transform:translateY(-50%); }
+    .cm.tl{top:1.5rem;left:1.5rem} .cm.tr{top:1.5rem;right:1.5rem}
+    .cm.bl{bottom:1.5rem;left:1.5rem} .cm.br{bottom:1.5rem;right:1.5rem}
 
-    /* ── HERO ── */
-    .hero {
-      flex: 1;
-      padding: 7rem 3rem 4rem;
-      max-width: 1100px;
-      width: 100%;
-    }
-    .hero-eyebrow {
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 2.5rem;
-    }
-    .hero-name {
-      font-family: var(--serif);
-      font-size: clamp(5rem, 13vw, 10rem);
-      font-weight: 300;
-      line-height: 0.92;
-      letter-spacing: -0.02em;
-      margin-bottom: 3.5rem;
-    }
-    .hero-name em { font-style: italic; }
-    .hero-bio {
-      font-size: 0.975rem;
-      color: var(--muted);
-      line-height: 1.75;
-      max-width: 44ch;
-      font-weight: 400;
-    }
+    #page { position:relative; z-index:3; opacity:0; transition:opacity .8s ease; min-height:100vh; display:flex; flex-direction:column; }
+    #page.vis { opacity:1; }
 
-    /* ── INTERESTS STRIP ── */
-    /*
-      ╔══════════════════════════════════════════════════════╗
-      ║  EDIT THIS SECTION to update your interests/hobbies  ║
-      ╚══════════════════════════════════════════════════════╝
-    */
-    .interests {
-      display: flex;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .interest-item {
-      flex: 1;
-      padding: 1.75rem 3rem;
-      border-right: 1px solid var(--border);
-      transition: background 0.2s;
-    }
-    .interest-item:last-child { border-right: none; }
-    .interest-num {
-      display: block;
-      font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 0.6rem;
-    }
-    .interest-title {
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      font-weight: 300;
-      font-style: italic;
-    }
-    .interest-desc {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 0.4rem;
-      letter-spacing: 0.04em;
-    }
+    nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 3rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:50; }
+    .nlogo { font-family:var(--serif); font-size:1.05rem; font-weight:400; }
+    .nr { display:flex; gap:2rem; align-items:center; }
+    .nclk { font-size:.62rem; color:var(--a2); font-variant-numeric:tabular-nums; letter-spacing:.06em; }
+    .nloc { font-size:.62rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
 
-    /* ── FOOTER ── */
-    footer {
-      padding: 1.75rem 3rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    footer p { font-size: 0.72rem; color: var(--muted); }
+    .hero { padding:4.5rem 3rem 3rem; border-bottom:1px solid var(--border); flex:1; }
+    .hmeta { display:flex; justify-content:space-between; font-size:.58rem; color:var(--muted); letter-spacing:.14em; text-transform:uppercase; margin-bottom:2.5rem; }
+    .hname { font-family:var(--serif); font-size:clamp(5rem,15vw,10rem); font-weight:300; line-height:.88; letter-spacing:-.03em; overflow:hidden; margin-bottom:2.5rem; }
+    .hrow { display:block; overflow:hidden; }
+    .hspan { display:block; transform:translateY(106%); transition:transform .85s cubic-bezier(.16,1,.3,1); }
+    .hrow.it { font-style:italic; padding-left:clamp(3rem,7vw,6rem); }
+    .hrow.it .hspan { transition-delay:.13s; }
+    .hrow.vis .hspan { transform:translateY(0); }
+    .hline { height:1px; background:linear-gradient(90deg,var(--accent),transparent); width:0; transition:width 1.2s cubic-bezier(.16,1,.3,1) .4s; margin-bottom:2.5rem; }
+    .hline.vis { width:55%; }
+    .hbot { display:flex; justify-content:space-between; align-items:flex-end; }
+    .hbio { font-size:.82rem; color:var(--a2); line-height:1.8; max-width:36ch; }
+    .hstats { display:flex; gap:3rem; }
+    .hstat { display:flex; flex-direction:column; align-items:flex-end; gap:.2rem; }
+    .hsn { font-family:var(--serif); font-size:3.2rem; font-weight:300; line-height:1; }
+    .hsl { font-size:.5rem; color:var(--muted); letter-spacing:.16em; text-transform:uppercase; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav, footer { padding: 1.25rem 1.5rem; }
-      .hero { padding: 3.5rem 1.5rem 3rem; }
-      .interests { flex-direction: column; }
-      .interest-item {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding: 1.25rem 1.5rem;
-      }
-      .interest-item:last-child { border-bottom: none; }
+    .tkr { border-bottom:1px solid var(--border); padding:.9rem 0; overflow:hidden; }
+    .tkri { display:flex; gap:2.5rem; white-space:nowrap; width:max-content; animation:tkr 22s linear infinite; }
+    .tkri:hover { animation-play-state:paused; }
+    .ti { font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+    .tg { color:var(--accent); font-size:.55rem; }
+    @keyframes tkr { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    .ints { display:flex; border-bottom:1px solid var(--border); }
+    .int { flex:1; padding:2rem 3rem; border-right:1px solid var(--border); position:relative; overflow:hidden; cursor:none; }
+    .int:last-child { border-right:none; }
+    .iswp { position:absolute; inset:0; background:linear-gradient(105deg,transparent,rgba(201,169,110,.05),transparent); transform:translateX(-110%); transition:transform .55s cubic-bezier(.16,1,.3,1); }
+    .int:hover .iswp { transform:translateX(110%); }
+    .in { font-size:.55rem; color:var(--muted); letter-spacing:.14em; text-transform:uppercase; display:block; margin-bottom:1rem; }
+    .it { font-family:var(--serif); font-size:1.7rem; font-weight:300; font-style:italic; display:block; transition:color .25s; letter-spacing:-.01em; }
+    .int:hover .it { color:var(--accent); }
+    .iarr { position:absolute; right:2rem; bottom:2rem; font-size:.7rem; color:var(--accent); opacity:0; transform:translateY(6px) translateX(-6px); transition:opacity .2s,transform .2s; }
+    .int:hover .iarr { opacity:1; transform:translateY(0) translateX(0); }
+
+    footer { padding:1.5rem 3rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; margin-top:auto; }
+    footer p { font-size:.65rem; color:var(--muted); }
+
+    @media(max-width:768px){
+      nav,footer{padding:1.25rem 1.5rem}
+      .hero{padding:2.5rem 1.5rem 2rem}
+      .ints{flex-direction:column}
+      .int{border-right:none;border-bottom:1px solid var(--border);padding:1.5rem}
+      .int:last-child{border-bottom:none}
+      .hbot{flex-direction:column;gap:1.5rem;align-items:flex-start}
+      .hstats{align-self:flex-end}
     }
   </style>
 </head>
 <body>
+  <canvas id="bg-canvas"></canvas>
+  <div id="grain"></div>
+  <div id="cdot"></div><div id="cring"></div>
+  <div class="cm tl"></div><div class="cm tr"></div>
+  <div class="cm bl"></div><div class="cm br"></div>
 
-  <nav>
-    <span class="nav-name">Moosa Zafar</span>
-    <span class="nav-tag">Edmonton, AB</span>
-  </nav>
+  <div id="pre">
+    <p class="plbl">Loading</p>
+    <div id="pbarw"><div id="pbar"></div></div>
+    <div><span id="pnum">0</span><span class="ppct">%</span></div>
+  </div>
 
-  <main>
-    <div class="hero">
-      <!--
-        ╔══════════════════════════════════╗
-        ║  EDIT: your name and short bio   ║
-        ╚══════════════════════════════════╝
-      -->
-      <p class="hero-eyebrow">Engineer · Photographer · Maker</p>
-      <h1 class="hero-name">Moosa<br><em>Zafar</em></h1>
-      <p class="hero-bio">
-        Making things — with circuits, cameras, and hands.
-        Based in Edmonton. Curious about how things work
-        and how they ought to look.
-      </p>
+  <div id="page">
+    <nav>
+      <span class="nlogo">Moosa Zafar</span>
+      <div class="nr">
+        <span class="nclk" id="clk">--:--:--</span>
+        <span class="nloc">Edmonton, AB</span>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hmeta">
+        <span>Engineer · Photographer · Maker</span>
+        <span id="dstr"></span>
+      </div>
+      <h1 class="hname">
+        <span class="hrow" id="r1"><span class="hspan">MOOSA</span></span>
+        <span class="hrow it" id="r2"><span class="hspan">ZAFAR</span></span>
+      </h1>
+      <div class="hline" id="hline"></div>
+      <div class="hbot">
+        <!-- EDIT: your bio -->
+        <p class="hbio">Making things — with circuits,<br>cameras, and hands.<br>Based in Edmonton.</p>
+        <div class="hstats">
+          <div class="hstat"><span class="hsn" id="sc1">0</span><span class="hsl">Sections</span></div>
+          <div class="hstat"><span class="hsn" id="sc2">0</span><span class="hsl">Projects</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tkr"><div class="tkri" id="tkri"></div></div>
+
+    <!-- EDIT: update labels/numbers if you add sections -->
+    <div class="ints">
+      <div class="int"><div class="iswp"></div><span class="in">01</span><span class="it">Photography</span><span class="iarr">↗</span></div>
+      <div class="int"><div class="iswp"></div><span class="in">02</span><span class="it">Engineering</span><span class="iarr">↗</span></div>
+      <div class="int"><div class="iswp"></div><span class="in">03</span><span class="it">Design &amp; Making</span><span class="iarr">↗</span></div>
     </div>
 
-    <div class="interests">
-      <div class="interest-item">
-        <span class="interest-num">01</span>
-        <p class="interest-title">Photography</p>
-        <p class="interest-desc">Light &amp; composition</p>
-      </div>
-      <div class="interest-item">
-        <span class="interest-num">02</span>
-        <p class="interest-title">Engineering</p>
-        <p class="interest-desc">Hardware &amp; systems</p>
-      </div>
-      <div class="interest-item">
-        <span class="interest-num">03</span>
-        <p class="interest-title">Design &amp; Making</p>
-        <p class="interest-desc">Form &amp; material</p>
-      </div>
-    </div>
-  </main>
+    <footer>
+      <p>© 2026 Moosa Zafar</p>
+      <p>Edmonton, Alberta</p>
+    </footer>
+  </div>
 
-  <footer>
-    <!--
-      EDIT: update the year and your email if you want one shown
-    -->
-    <p>© 2026 Moosa Zafar</p>
-    <p>Edmonton, Alberta, Canada</p>
-  </footer>
-
+  <script>
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // CURSOR
+    const dot=document.getElementById('cdot'),ring=document.getElementById('cring');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+    (function al(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(al);})();
+    document.querySelectorAll('.int,.nlogo,a').forEach(el=>{
+      el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+      el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+    });
+    // CANVAS
+    const cvs=document.getElementById('bg-canvas'),ctx=cvs.getContext('2d');
+    function rsz(){cvs.width=window.innerWidth;cvs.height=window.innerHeight;}rsz();window.addEventListener('resize',rsz);
+    const dts=[];
+    for(let r=0;r<22;r++)for(let c=0;c<32;c++)dts.push({x:(c+.5)/32,y:(r+.5)/22,p:Math.random()*Math.PI*2,s:.3+Math.random()*.7});
+    (function draw(ts){
+      const t=ts/1000;ctx.clearRect(0,0,cvs.width,cvs.height);
+      dts.forEach(d=>{
+        const x=d.x*cvs.width,y=d.y*cvs.height;
+        const dist=Math.sqrt((x-mx)**2+(y-my)**2);
+        const boost=Math.max(0,1-dist/200)*.15;
+        const a=(dark?.04:.07)+.025*Math.sin(t*d.s+d.p)+boost;
+        ctx.beginPath();ctx.arc(x,y,1.3,0,Math.PI*2);
+        ctx.fillStyle=dark?`rgba(201,169,110,${a})`:`rgba(100,78,38,${a})`;ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    })(0);
+    // GRAIN
+    const ns=`<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/></filter><rect width='300' height='300' filter='url(#n)'/></svg>`;
+    const g=document.getElementById('grain');
+    g.style.backgroundImage=`url("data:image/svg+xml,${encodeURIComponent(ns)}")`;
+    g.style.backgroundSize='300px 300px';g.style.opacity=dark?'.03':'.018';
+    // CLOCK
+    function tick(){
+      const n=new Date();
+      document.getElementById('clk').textContent=n.toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'America/Edmonton'});
+      document.getElementById('dstr').textContent=n.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric',timeZone:'America/Edmonton'}).toUpperCase();
+    }
+    tick();setInterval(tick,1000);
+    // TICKER
+    const tItems=['Photography','✦','Engineering','✦','Design & Making','✦','Edmonton AB','✦','moosazafar.com','✦'];
+    const tkri=document.getElementById('tkri');
+    [...tItems,...tItems,...tItems,...tItems].forEach(t=>{const s=document.createElement('span');s.className=t==='✦'?'tg':'ti';s.textContent=t;tkri.appendChild(s);});
+    // SCRAMBLE
+    const ch='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    function scr(el,tgt,ms){
+      const st=performance.now();
+      (function fr(n){const p=Math.min((n-st)/ms,1);el.textContent=tgt.split('').map((c,i)=>{if(c===' ')return ' ';return i/tgt.length<p?c:ch[Math.floor(Math.random()*ch.length)];}).join('');if(p<1)requestAnimationFrame(fr);else el.textContent=tgt;})(st);
+    }
+    document.querySelectorAll('.int').forEach(el=>{
+      const t=el.querySelector('.it'),orig=t.textContent;
+      el.addEventListener('mouseenter',()=>scr(t,orig.toUpperCase(),480));
+      el.addEventListener('mouseleave',()=>{t.textContent=orig;});
+    });
+    // COUNT UP
+    function cu(el,tgt,dur){const st=performance.now();(function fr(n){const p=Math.min((n-st)/dur,1);el.textContent=Math.round(p*tgt);if(p<1)requestAnimationFrame(fr);})(st);}
+    // PRELOADER
+    const pre=document.getElementById('pre'),bar=document.getElementById('pbar'),num=document.getElementById('pnum');
+    let n=0;
+    const iv=setInterval(()=>{
+      n+=Math.floor(Math.random()*9)+3;if(n>=100){n=100;clearInterval(iv);}
+      num.textContent=n;bar.style.width=n+'%';
+      if(n===100){setTimeout(()=>{pre.classList.add('out');setTimeout(()=>{pre.style.display='none';document.getElementById('page').classList.add('vis');setTimeout(()=>{document.getElementById('r1').classList.add('vis');document.getElementById('r2').classList.add('vis');document.getElementById('hline').classList.add('vis');cu(document.getElementById('sc1'),3,900);cu(document.getElementById('sc2'),12,1300);},100);},700);},400);}
+    },55);
+  </script>
 </body>
 </html>
