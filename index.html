@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moosa Zafar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #f4f2ec;
+      --text:   #111009;
+      --muted:  #9a9890;
+      --border: #e0ddd5;
+      --serif:  'Cormorant', Georgia, serif;
+      --sans:   'Syne', sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:     #0d0c0a;
+        --text:   #e8e4db;
+        --muted:  #6a6760;
+        --border: #1e1d1a;
+      }
+    }
+
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadein 0.6s ease 0.1s forwards;
+    }
+    @keyframes fadein { to { opacity: 1; } }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.75rem 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-name {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+    .nav-tag {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      flex: 1;
+      padding: 7rem 3rem 4rem;
+      max-width: 1100px;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(5rem, 13vw, 10rem);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      margin-bottom: 3.5rem;
+    }
+    .hero-name em { font-style: italic; }
+    .hero-bio {
+      font-size: 0.975rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 44ch;
+      font-weight: 400;
+    }
+
+    /* ── INTERESTS STRIP ── */
+    /*
+      ╔══════════════════════════════════════════════════════╗
+      ║  EDIT THIS SECTION to update your interests/hobbies  ║
+      ╚══════════════════════════════════════════════════════╝
+    */
+    .interests {
+      display: flex;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .interest-item {
+      flex: 1;
+      padding: 1.75rem 3rem;
+      border-right: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .interest-item:last-child { border-right: none; }
+    .interest-num {
+      display: block;
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .interest-title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 300;
+      font-style: italic;
+    }
+    .interest-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.75rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p { font-size: 0.72rem; color: var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav, footer { padding: 1.25rem 1.5rem; }
+      .hero { padding: 3.5rem 1.5rem 3rem; }
+      .interests { flex-direction: column; }
+      .interest-item {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 1.25rem 1.5rem;
+      }
+      .interest-item:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="nav-name">Moosa Zafar</span>
+    <span class="nav-tag">Edmonton, AB</span>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <!--
+        ╔══════════════════════════════════╗
+        ║  EDIT: your name and short bio   ║
+        ╚══════════════════════════════════╝
+      -->
+      <p class="hero-eyebrow">Engineer · Photographer · Maker</p>
+      <h1 class="hero-name">Moosa<br><em>Zafar</em></h1>
+      <p class="hero-bio">
+        Making things — with circuits, cameras, and hands.
+        Based in Edmonton. Curious about how things work
+        and how they ought to look.
+      </p>
+    </div>
+
+    <div class="interests">
+      <div class="interest-item">
+        <span class="interest-num">01</span>
+        <p class="interest-title">Photography</p>
+        <p class="interest-desc">Light &amp; composition</p>
+      </div>
+      <div class="interest-item">
+        <span class="interest-num">02</span>
+        <p class="interest-title">Engineering</p>
+        <p class="interest-desc">Hardware &amp; systems</p>
+      </div>
+      <div class="interest-item">
+        <span class="interest-num">03</span>
+        <p class="interest-title">Design &amp; Making</p>
+        <p class="interest-desc">Form &amp; material</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <!--
+      EDIT: update the year and your email if you want one shown
+    -->
+    <p>© 2026 Moosa Zafar</p>
+    <p>Edmonton, Alberta, Canada</p>
+  </footer>
+
+</body>
+</html>
