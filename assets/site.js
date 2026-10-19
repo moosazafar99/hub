@@ -341,29 +341,53 @@
     var mq = window.matchMedia('(max-width:768px)');
     var raf = null;
 
-    // Lead the text by this much, so the photo has already dissolved
-    // where the type is about to land rather than meeting it exactly.
-    var LEAD = 48;
+    var LEAD = 48;      // keep the dissolve this far ahead of the type
+    var RATE = 1.25;    // wipe travels faster than the scroll, so the edge
+                        // visibly sweeps instead of riding with the text
+    var DRIFT = 0.16;   // how far the photo creeps up per pixel scrolled
+    var EASE = 0.16;    // follow factor; lower trails more softly
+
+    var shown = 0;      // eased wipe fraction actually rendered
+    var baseTop = 0, baseH = 1;
+
+    // Measured with the drift removed. The frame is position:fixed, so
+    // these do not change while scrolling — only on resize.
+    function measure() {
+      root.style.setProperty('--photo-shift', '0px');
+      var b = frame.getBoundingClientRect();
+      baseTop = b.top;
+      baseH = b.height || 1;
+    }
 
     function update() {
       raf = null;
       if (!root.classList.contains('photo-fade')) return;
 
-      var box = frame.getBoundingClientRect();
-      var h = box.height || 1;
+      var y = window.scrollY;
 
-      // Drive the wipe off the rising text itself rather than a guessed
-      // scroll distance: the erased height is however far the first line
-      // has climbed into the photo. Self-correcting at any screen size.
+      // Two drivers. The scroll one gives the dissolve its own pace so it
+      // reads as happening, rather than sitting at a fixed offset from the
+      // text. The text one is a floor: the photo must always be gone where
+      // type lands, whatever the pacing does.
       var riser = $('.hmeta') || $('.hbio');
-      var erased = riser
-        ? (box.bottom - riser.getBoundingClientRect().top) + LEAD
-        : window.scrollY;
+      var floor = riser
+        ? ((baseTop + baseH) - riser.getBoundingClientRect().top + LEAD) / baseH
+        : 0;
+      var target = Math.min(1, Math.max(0, Math.max(y * RATE / baseH, floor)));
 
-      var t = Math.min(1, Math.max(0, erased / h));
-      root.style.setProperty('--photo-wipe', (t * 100).toFixed(2) + '%');
+      // Ease toward the target so the edge glides instead of stepping with
+      // each scroll event, but never let the easing fall behind the floor.
+      shown += (target - shown) * EASE;
+      if (shown < floor) shown = floor;
+      if (Math.abs(target - shown) < 0.002) shown = target;
+
+      root.style.setProperty('--photo-wipe', (shown * 100).toFixed(2) + '%');
+      root.style.setProperty('--photo-shift', (-y * DRIFT).toFixed(1) + 'px');
       // Only used where mask-image is unsupported.
-      root.style.setProperty('--photo-fade', String(1 - t));
+      root.style.setProperty('--photo-fade', String(1 - shown));
+
+      // Keep stepping while the eased value is still catching up.
+      if (shown !== target && raf === null) raf = requestAnimationFrame(update);
     }
 
     function onScroll() {
@@ -373,15 +397,20 @@
     function sync() {
       if (mq.matches && !reduced) {
         root.classList.add('photo-fade');
+        measure();
         window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', measure);
         update();
       } else {
         // Rotating to landscape or widening past the breakpoint must put
         // the photo back in flow, or it stays pinned on desktop.
         root.classList.remove('photo-fade');
         root.style.removeProperty('--photo-wipe');
+        root.style.removeProperty('--photo-shift');
         root.style.removeProperty('--photo-fade');
+        shown = 0;
         window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', measure);
         if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
       }
     }
