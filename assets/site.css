@@ -293,7 +293,7 @@ a.nlogo:hover{color:var(--text);}
 .exp-company span{color:var(--muted);}
 .exp-desc{font-size:.84rem;color:var(--a2);line-height:1.8;max-width:62ch;}
 .exp-desc + .exp-desc{margin-top:-.35rem;}
-.exp-tags{display:flex;flex-wrap:wrap;gap:.4rem;}
+.exp-tags{display:flex;flex-wrap:wrap;gap:.4rem;list-style:none;}
 .exp-tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--border);color:var(--muted);transition:border-color .2s,color .2s;}
 .exp-item:hover .exp-tag{border-color:var(--muted);color:var(--a2);}
 .exp-right{display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;}
@@ -355,7 +355,7 @@ a.nlogo:hover{color:var(--text);}
 .proj:hover .proj-title{color:var(--accent);}
 .proj-desc{font-size:.84rem;color:var(--a2);line-height:1.8;max-width:62ch;}
 .proj-desc + .proj-desc{margin-top:-.35rem;}
-.proj-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem;list-style:none;}
 .tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--border);color:var(--muted);transition:border-color .2s,color .2s;}
 .proj:hover .tag{border-color:var(--muted);color:var(--a2);}
 .proj-right{display:flex;flex-direction:column;gap:.8rem;align-items:flex-end;}
@@ -424,7 +424,11 @@ footer a:hover{color:var(--accent);}
   /* Back into normal flow: at this width an absolutely positioned frame
      would sit on top of the name. The matching reserve on .hmeta goes
      with it. */
-  .photo-frame{width:117px;position:static;margin-bottom:1.5rem;}
+  /* 70% smaller and centred. At 35px the 9px rails would swallow half
+     the face, so they shrink with it. */
+  .photo-frame{width:35px;position:static;margin:0 auto 1.5rem;}
+  .pf-rail{width:3px;}
+  .pf-hole{width:1px;height:1px;}
 
   /* Phone: the big name sat directly under the portrait and read as if it
      were stamped across it. Hidden visually only — this is the page's <h1>,
