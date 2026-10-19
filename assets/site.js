@@ -356,7 +356,14 @@
     // Dimming begins once you have scrolled this fraction of the photo's
     // own height — tied to the image rather than to the run, so it starts
     // at the same visual point whatever the screen size.
-    var DIM_START_H = 0.5;
+    var DIM_START_H = 0.2;
+    // Finish the dim before the wipe does. Running them to the same point
+    // meant the photo was already mostly erased by the time the dim
+    // became visible, so the wipe appeared to be doing all the work.
+    var DIM_END_SPAN = 0.8;
+    // Below 2 the curve is far less back-loaded, so the dim reads early
+    // instead of only in its last few frames.
+    var DIM_POWER = 1.5;
 
     var shown = 0;      // eased wipe fraction actually rendered
     var baseTop = 0, baseH = 1;
@@ -402,14 +409,15 @@
         : 0);
       var span = Math.max(1, (baseH + restGap - LEAD_TIGHT) / (1 - DRIFT));
 
-      // Nothing until half the photo's height has scrolled past, then an
-      // ease-in cubic to nothing — slow at first, accelerating away, and
-      // finishing with the wipe.
+      // Holds briefly, then eases away — starting early enough and on a
+      // shallow enough curve that the dimming is actually visible rather
+      // than being hidden behind the wipe.
       var dimFrom = baseH * DIM_START_H;
-      var u = span > dimFrom
-        ? Math.min(1, Math.max(0, (y - dimFrom) / (span - dimFrom)))
+      var dimTo = span * DIM_END_SPAN;
+      var u = dimTo > dimFrom
+        ? Math.min(1, Math.max(0, (y - dimFrom) / (dimTo - dimFrom)))
         : (y >= dimFrom ? 1 : 0);
-      var dim = 1 - (u * u * u);
+      var dim = 1 - Math.pow(u, DIM_POWER);
 
       root.style.setProperty('--photo-wipe', (shown * 100).toFixed(2) + '%');
       root.style.setProperty('--photo-shift', (-y * DRIFT).toFixed(1) + 'px');
