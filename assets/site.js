@@ -353,6 +353,8 @@
     var DRIFT = 0.16;   // how far the photo creeps up per pixel scrolled
     var EASE = 0.16;    // follow factor; lower trails more softly
 
+    var DIM_START = 0.5; // fraction of the run before any dimming begins
+
     var shown = 0;      // eased wipe fraction actually rendered
     var baseTop = 0, baseH = 1;
 
@@ -388,10 +390,26 @@
       if (shown < target && target - shown > 0.25) shown = target;
       if (Math.abs(target - shown) < 0.002) shown = target;
 
+      // Scroll distance over which the photo clears, derived rather than
+      // hardcoded so the dim finishes with the wipe at any screen size.
+      // Solves for the scroll at which the wipe would reach full height,
+      // accounting for the drift moving the frame as the text rises.
+      var restGap = (riser
+        ? riser.getBoundingClientRect().top + y - (baseTop + baseH)
+        : 0);
+      var span = Math.max(1, (baseH + restGap - LEAD_TIGHT) / (1 - DRIFT));
+
+      // Ease-in cubic over the back half: nothing for the first 50%, then
+      // slow at first and accelerating away.
+      var p = Math.min(1, Math.max(0, y / span));
+      var u = p <= DIM_START ? 0 : (p - DIM_START) / (1 - DIM_START);
+      var dim = 1 - (u * u * u);
+
       root.style.setProperty('--photo-wipe', (shown * 100).toFixed(2) + '%');
       root.style.setProperty('--photo-shift', (-y * DRIFT).toFixed(1) + 'px');
-      // Only used where mask-image is unsupported.
-      root.style.setProperty('--photo-fade', String(1 - shown));
+      root.style.setProperty('--photo-dim', dim.toFixed(3));
+      // No mask support: opacity has to carry the dissolve as well.
+      root.style.setProperty('--photo-fade', ((1 - shown) * dim).toFixed(3));
 
       if (shown !== target && raf === null) raf = requestAnimationFrame(update);
     }
@@ -413,6 +431,7 @@
         root.classList.remove('photo-fade');
         root.style.removeProperty('--photo-wipe');
         root.style.removeProperty('--photo-shift');
+        root.style.removeProperty('--photo-dim');
         root.style.removeProperty('--photo-fade');
         shown = 0;
         window.removeEventListener('scroll', onScroll);
