@@ -79,6 +79,25 @@ class="exp-item">` block to add a role. Projects live in
 The four pages used to carry four separate copies of the same CSS and JS,
 which is why they had drifted apart.
 
+### Bump the asset version when you change CSS or JS
+
+Every page loads its assets with a version query:
+
+```html
+<link rel="stylesheet" href="/assets/site.css?v=1.1.1">
+<script src="/assets/site.js?v=1.1.1" defer>
+```
+
+**When you edit `site.css` or `site.js`, bump that number in all five HTML
+files.** GitHub Pages serves assets with `Cache-Control: max-age=600` and the
+filename never changes, so without the version a returning visitor gets the new
+HTML paired with their cached old stylesheet. That is not a theoretical
+problem — it shipped a broken mobile layout to a real phone, with the name
+visible and the photo at the wrong aspect ratio, while the server was serving
+the correct CSS all along.
+
+Changing the query string makes it a new URL, so the browser has to refetch.
+
 ### Before changing colours
 
 The `--muted`, `--a2` and `--accent` variables at the top of `site.css` are all
