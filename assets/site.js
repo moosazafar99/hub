@@ -371,6 +371,13 @@
     // Measured with the drift removed. The frame is position:fixed, so
     // these do not change while scrolling — only on resize.
     function measure() {
+      // Publish the real nav height rather than trusting the CSS default:
+      // the offset has to follow the nav if its type size ever changes.
+      var nav = $('nav[aria-label="Primary"]');
+      if (nav) {
+        root.style.setProperty(
+          '--phone-nav', Math.round(nav.getBoundingClientRect().height) + 'px');
+      }
       root.style.setProperty('--photo-shift', '0px');
       var b = frame.getBoundingClientRect();
       baseTop = b.top;
@@ -457,6 +464,20 @@
     sync();
     if (mq.addEventListener) mq.addEventListener('change', sync);
     else if (mq.addListener) mq.addListener(sync);
+
+    // The nav is set in a webfont, so it grows once that loads. Measuring
+    // only at startup captured the fallback-font height and left the
+    // portrait a few px high. Re-measure when the fonts settle and again
+    // on load.
+    function remeasure() {
+      if (!root.classList.contains('photo-fade')) return;
+      measure();
+      update();
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(remeasure).catch(function () {});
+    }
+    window.addEventListener('load', remeasure, { once: true });
   });
 
   /* ── LINK LABEL SCRAMBLE ──────────────────────────────────── */
