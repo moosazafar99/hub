@@ -327,6 +327,56 @@
     });
   });
 
+  /* ── PHONE: FADE THE PINNED PORTRAIT AS THE PAGE SCROLLS ─────
+     The frame is fixed by CSS; this only drives its opacity. The
+     .photo-fade class is set by the inline bootstrap before paint, so
+     nothing here affects layout — if this block never runs, the
+     bootstrap's failsafe drops the class and the photo returns to
+     normal flow.
+     ──────────────────────────────────────────────────────────── */
+  safe('photo-fade', function () {
+    var frame = $('.photo-frame');
+    if (!frame) return;
+
+    var mq = window.matchMedia('(max-width:768px)');
+    var raf = null;
+
+    function update() {
+      raf = null;
+      if (!root.classList.contains('photo-fade')) return;
+      // Fade over a little more than half the portrait's height. The text
+      // starts crossing it around 55% of the way down, and light-grey type
+      // on a half-opaque light photo is unreadable — so it has to be
+      // nearly gone by then, not halfway.
+      var h = (frame.getBoundingClientRect().height || 1) * 0.55;
+      var t = Math.min(1, Math.max(0, window.scrollY / h));
+      root.style.setProperty('--photo-fade', String(1 - t));
+    }
+
+    function onScroll() {
+      if (raf === null) raf = requestAnimationFrame(update);
+    }
+
+    function sync() {
+      if (mq.matches && !reduced) {
+        root.classList.add('photo-fade');
+        window.addEventListener('scroll', onScroll, { passive: true });
+        update();
+      } else {
+        // Rotating to landscape or widening past the breakpoint must put
+        // the photo back in flow, or it stays pinned on desktop.
+        root.classList.remove('photo-fade');
+        root.style.removeProperty('--photo-fade');
+        window.removeEventListener('scroll', onScroll);
+        if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+      }
+    }
+
+    sync();
+    if (mq.addEventListener) mq.addEventListener('change', sync);
+    else if (mq.addListener) mq.addListener(sync);
+  });
+
   /* ── LINK LABEL SCRAMBLE ──────────────────────────────────── */
   safe('scramble', function () {
     if (reduced) return;
