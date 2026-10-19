@@ -413,16 +413,19 @@ footer a:hover{color:var(--accent);}
   .proj-year{padding-top:0;}
 }
 @media (max-width:768px){
-  :root{--pad:1.5rem;}
+  :root{
+    --pad:1.5rem;
+    /* The single knob for the phone hero: the space above the photo
+       and to each screen edge. The photo sizes itself to whatever is
+       left, so changing this one value keeps all three gaps equal. */
+    --phone-gap:2.5rem;
+  }
   /* The CV and LinkedIn links used to be hidden entirely on mobile,
      leaving phone visitors with no way to reach the resume. */
   .nr{gap:1rem;flex-wrap:wrap;justify-content:flex-end;}
   .nr .nstatus,.nr .ndiv,.nr .nclk,.nr .nloc{display:none;}
   nav[aria-label="Primary"]{padding:1rem var(--pad);}
-  /* Top gap derived to equal the side gap. Percentages here resolve
-     against the content width, unlike 100vw which also counts a
-     scrollbar and left the top 7px out from the sides. */
-  .hero{padding:calc(var(--pad) + (100% - 1rem) / 4) var(--pad) 2rem;}
+  .hero{padding:var(--phone-gap) var(--pad) 2rem;}
   .hbot{grid-template-columns:1fr;gap:2rem;}
   /* Back into normal flow: at this width an absolutely positioned frame
      would sit on top of the name. The matching reserve on .hmeta goes
@@ -432,7 +435,9 @@ footer a:hover{color:var(--accent);}
      photo width rather than fixed, so the three gaps stay equal by
      construction instead of needing to be re-tuned by hand. */
   .photo-frame{
-    width:calc((100% - 2rem) / 2);
+    /* .hero already insets by --pad, so only the remainder comes off
+       the width to land on --phone-gap at each screen edge. */
+    width:calc(100% - 2 * (var(--phone-gap) - var(--pad)));
     /* relative, NOT static: the <img> inside is position:absolute
        with inset:0, so the frame has to stay a containing block.
        As static, the image resolved against .hero instead and painted
