@@ -341,9 +341,15 @@
     var mq = window.matchMedia('(max-width:768px)');
     var raf = null;
 
-    var LEAD = 48;      // keep the dissolve this far ahead of the type
-    var RATE = 1.25;    // wipe travels faster than the scroll, so the edge
-                        // visibly sweeps instead of riding with the text
+    // The gap between the dissolve edge and the rising text, in px. It
+    // starts open and closes as you scroll, so the edge converges on the
+    // text rather than running away from it. Driving this gap directly is
+    // the only reliable way to control it: the parallax drift moves the
+    // frame too, so a wipe derived from scroll alone drifts out of step.
+    var LEAD_OPEN = 40;   // gap at rest
+    var LEAD_TIGHT = 16;  // gap once settled — never 0, or type sits on the photo
+    var LEAD_CLOSE = 300; // px of scroll over which it closes
+
     var DRIFT = 0.16;   // how far the photo creeps up per pixel scrolled
     var EASE = 0.16;    // follow factor; lower trails more softly
 
@@ -364,21 +370,22 @@
       if (!root.classList.contains('photo-fade')) return;
 
       var y = window.scrollY;
-
-      // Two drivers. The scroll one gives the dissolve its own pace so it
-      // reads as happening, rather than sitting at a fixed offset from the
-      // text. The text one is a floor: the photo must always be gone where
-      // type lands, whatever the pacing does.
       var riser = $('.hmeta') || $('.hbio');
-      var floor = riser
-        ? ((baseTop + baseH) - riser.getBoundingClientRect().top + LEAD) / baseH
-        : 0;
-      var target = Math.min(1, Math.max(0, Math.max(y * RATE / baseH, floor)));
+      var lead = LEAD_TIGHT +
+        (LEAD_OPEN - LEAD_TIGHT) * Math.max(0, 1 - y / LEAD_CLOSE);
+
+      // Live rect, so the drift is already accounted for.
+      var box = frame.getBoundingClientRect();
+      var erased = riser
+        ? box.bottom - (riser.getBoundingClientRect().top - lead)
+        : y;
+
+      var target = Math.min(1, Math.max(0, erased / baseH));
 
       // Ease toward the target so the edge glides instead of stepping with
-      // each scroll event, but never let the easing fall behind the floor.
+      // each scroll event, but never let easing leave it behind the text.
       shown += (target - shown) * EASE;
-      if (shown < floor) shown = floor;
+      if (shown < target && target - shown > 0.25) shown = target;
       if (Math.abs(target - shown) < 0.002) shown = target;
 
       root.style.setProperty('--photo-wipe', (shown * 100).toFixed(2) + '%');
@@ -386,7 +393,6 @@
       // Only used where mask-image is unsupported.
       root.style.setProperty('--photo-fade', String(1 - shown));
 
-      // Keep stepping while the eased value is still catching up.
       if (shown !== target && raf === null) raf = requestAnimationFrame(update);
     }
 
