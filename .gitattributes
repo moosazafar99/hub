@@ -1,0 +1,9 @@
+# Keep LF in the repo so the site is byte-identical on every machine.
+* text=auto eol=lf
+
+# CNAME binds the custom domain — leave it exactly as GitHub wrote it.
+CNAME -text
+
+# Binary assets must never be line-ending converted.
+*.png binary
+*.pdf binary

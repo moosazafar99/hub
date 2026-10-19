@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Engineering — Moosa Zafar</title>
+<meta name="description" content="Engineering projects by Moosa Zafar: an HVAC external static pressure calculator built in Python, and a spring-actuated magnetic ultrasonic probe holder for pipe scanning.">
+<link rel="canonical" href="https://moosazafar.com/engineering/">
+<meta name="theme-color" content="#050504" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Moosa Zafar">
+<meta property="og:url" content="https://moosazafar.com/engineering/">
+<meta property="og:title" content="Engineering — Moosa Zafar">
+<meta property="og:description" content="Design tools, HVAC calculations, and hardware.">
+<meta property="og:image" content="https://moosazafar.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://moosazafar.com/og.png">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+
+<script>
+  (function () {
+    var d = document.documentElement;
+    d.className += ' js loading';
+    setTimeout(function () {
+      if (!window.__siteReady) {
+        d.classList.remove('loading', 'done');
+        d.classList.add('failsafe');
+      }
+    }, 2500);
+  })();
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="cdot" aria-hidden="true"></div><div id="cring" aria-hidden="true"></div>
+<div class="cm tl" aria-hidden="true"></div><div class="cm tr" aria-hidden="true"></div>
+<div class="cm bl" aria-hidden="true"></div><div class="cm br" aria-hidden="true"></div>
+
+<div id="pre" aria-hidden="true">
+  <p class="plbl">Loading</p>
+  <div id="pbarw"><div id="pbar"></div></div>
+</div>
+
+<div id="page">
+
+  <nav aria-label="Primary">
+    <div class="nleft">
+      <a href="/" class="nlogo">Moosa Zafar</a>
+      <span class="nsep" aria-hidden="true">/</span>
+      <span class="nsec" aria-current="page">Engineering</span>
+    </div>
+    <ul class="nr">
+      <li><a href="https://www.linkedin.com/in/moosazafar" class="nlink" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+      <li><a href="/resume.pdf" class="nlink">CV ↓</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <header class="ph">
+      <div class="ph-top">
+        <p class="ph-eyebrow">Tools · Hardware · Systems</p>
+        <p class="ph-eyebrow">2 projects</p>
+      </div>
+      <h1 class="ph-title" aria-label="Engineering">
+        <span class="pht-row"><span class="pht-span">Engi</span></span>
+        <span class="pht-row it"><span class="pht-span">neering</span></span>
+      </h1>
+      <div class="ph-line" id="phline" aria-hidden="true"></div>
+      <p class="ph-desc">
+        Work that came out of the day job — mostly the moment a repeated
+        manual calculation was worth turning into a tool.
+      </p>
+    </header>
+
+    <div class="projects">
+
+      <article class="proj">
+        <p class="proj-num">01</p>
+        <div class="proj-body">
+          <h2 class="proj-title">UT Probe Holder — Magnetic Pipe Scanner</h2>
+          <p class="proj-desc">
+            A spring-actuated, constant-force ultrasonic probe holder with magnetic
+            mounting, for hands-free pipe scanning from 2&Prime; NPS through to flat
+            surfaces. Reverse-engineered from an existing design, then reworked for
+            printability and field repair.
+          </p>
+          <p class="proj-desc">
+            Ran FEA across PLA, PETG, ABS and PA6-CF to compare structural performance
+            under spring loading, developed TPU gaskets for probe sealing and vibration
+            damping, and made the architecture modular so components swap out to fit
+            different probe sizes.
+          </p>
+          <ul class="proj-tags">
+            <li class="tag">Mechanical design</li>
+            <li class="tag">FEA</li>
+            <li class="tag">3D printing</li>
+            <li class="tag">NDT</li>
+          </ul>
+        </div>
+        <div class="proj-right">
+          <p class="proj-year">2026</p>
+          <p class="proj-role">Independent</p>
+        </div>
+      </article>
+
+      <article class="proj">
+        <p class="proj-num">02</p>
+        <div class="proj-body">
+          <h2 class="proj-title">HVAC ESP Calculator</h2>
+          <p class="proj-desc">
+            A Python/Tkinter desktop application that calculates external static pressure
+            losses across multi-section duct systems — automating fitting-loss lookups,
+            velocity checks and total system ESP, and replacing the manual spreadsheet
+            workflow I was using daily.
+          </p>
+          <p class="proj-desc">
+            Built in SMACNA fitting loss coefficients and velocity pressure tables so the
+            outputs stay code-compliant, then packaged it as a standalone executable and
+            handed it to colleagues.
+          </p>
+          <ul class="proj-tags">
+            <li class="tag">Python</li>
+            <li class="tag">Tkinter</li>
+            <li class="tag">SMACNA</li>
+            <li class="tag">HVAC</li>
+          </ul>
+        </div>
+        <div class="proj-right">
+          <p class="proj-year">2025</p>
+          <p class="proj-role">Independent</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="tkr" aria-hidden="true">
+      <div class="tkri" id="tkri"
+           data-items="Engineering|MEP &amp; HVAC|Tools &amp; hardware|Edmonton AB|moosazafar.com"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© <span id="yr">2026</span> Moosa Zafar</p>
+    <p>
+      <a href="/">moosazafar.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/moosazafar" target="_blank" rel="noopener">LinkedIn</a>
+      &nbsp;·&nbsp;
+      <a href="/resume.pdf">Resume</a>
+    </p>
+  </footer>
+</div>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

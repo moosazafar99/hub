@@ -1,0 +1,477 @@
+/* ═══════════════════════════════════════════════════════════════
+   moosazafar.com — shared stylesheet for every page
+   Edit once here; all pages update.
+
+   Accessibility notes (please keep these intact):
+   - --muted / --a2 / --accent are all >= 4.5:1 against --bg in both
+     themes. The old palette had --muted at 1.74:1, which was
+     effectively invisible. Do not darken these values.
+   - No text is set below 0.7rem (11.2px).
+   - Every animation is disabled under prefers-reduced-motion.
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:#050504;
+  --text:#ede8df;
+  --muted:#8a8478;      /* 5.49:1 on --bg */
+  --a2:#a39c8e;         /* 7.48:1 on --bg */
+  --border:#2e2b25;
+  --accent:#c9a96e;     /* 9.11:1 on --bg */
+  --green:#7fae86;
+  --serif:'Cormorant',Georgia,'Times New Roman',serif;
+  --sans:'Syne',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+
+  --pad:3rem;           /* horizontal page padding */
+  --micro:.72rem;       /* smallest label size */
+}
+
+@media (prefers-color-scheme:light){
+  :root{
+    --bg:#f2efe8;
+    --text:#0c0b09;
+    --muted:#6b6862;    /* 4.84:1 */
+    --a2:#57544e;       /* 6.57:1 */
+    --border:#d5d0c6;
+    --accent:#7d5f2e;   /* 5.15:1 */
+    --green:#3d6b43;
+  }
+}
+
+html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);min-height:100vh;overflow-x:hidden;
+}
+
+/* Focus visibility — was entirely absent before. */
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+/* Skip link for keyboard users */
+.skip{
+  position:absolute;left:.5rem;top:-3rem;z-index:600;
+  background:var(--accent);color:var(--bg);
+  padding:.6rem 1rem;font-size:.8rem;text-decoration:none;
+  transition:top .18s;
+}
+.skip:focus{top:.5rem;}
+
+/* ── DECORATIVE LAYERS ──────────────────────────────────────── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#grain{
+  position:fixed;inset:-50%;width:200%;height:200%;
+  z-index:1;pointer-events:none;opacity:.03;
+}
+.js #grain{animation:gr .4s steps(2) infinite;}
+@keyframes gr{
+  0%{transform:translate(0,0)}25%{transform:translate(-1%,-2%)}
+  50%{transform:translate(2%,1%)}75%{transform:translate(-2%,2%)}
+}
+.cm{position:fixed;width:14px;height:14px;z-index:2;opacity:.2;}
+.cm::before,.cm::after{content:'';position:absolute;background:var(--text);}
+.cm::before{width:1px;height:100%;left:50%;transform:translateX(-50%);}
+.cm::after{width:100%;height:1px;top:50%;transform:translateY(-50%);}
+.cm.tl{top:1.5rem;left:1.5rem}.cm.tr{top:1.5rem;right:1.5rem}
+.cm.bl{bottom:1.5rem;left:1.5rem}.cm.br{bottom:1.5rem;right:1.5rem}
+
+/* ── CUSTOM CURSOR ──────────────────────────────────────────────
+   Only on devices with a real pointer, and only when JS is running.
+   Previously `cursor:none` was global, so touch and no-JS visitors
+   lost all pointer feedback.
+   ─────────────────────────────────────────────────────────────── */
+#cdot,#cring{display:none;}
+@media (hover:hover) and (pointer:fine){
+  .js.cursor-on body{cursor:none;}
+  .js.cursor-on #cdot,.js.cursor-on #cring{display:block;}
+}
+#cdot{
+  width:6px;height:6px;background:var(--accent);border-radius:50%;
+  position:fixed;z-index:500;pointer-events:none;transform:translate(-50%,-50%);
+}
+#cring{
+  width:36px;height:36px;border:1px solid var(--accent);opacity:.45;
+  border-radius:50%;position:fixed;z-index:499;pointer-events:none;
+  transform:translate(-50%,-50%);transition:width .25s,height .25s,opacity .25s;
+}
+#cring.big{width:58px;height:58px;opacity:.8;}
+
+/* ── PRELOADER ──────────────────────────────────────────────────
+   Hidden by default. Only a JS-capable browser ever shows it, and
+   it clears on real font/asset readiness with a hard 900ms cap —
+   the old version faked a random 1.4-2.5s progress bar and held
+   the whole page at opacity:0 behind it.
+   ─────────────────────────────────────────────────────────────── */
+#pre{display:none;}
+.js.loading #pre{
+  display:flex;position:fixed;inset:0;background:var(--bg);z-index:400;
+  flex-direction:column;justify-content:flex-end;
+  padding:2.5rem var(--pad) 2rem;gap:1.2rem;
+  transition:opacity .45s ease;
+}
+.js.loading.done #pre{opacity:0;pointer-events:none;}
+.plbl{font-size:var(--micro);color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+#pbarw{width:100%;height:1px;background:var(--border);}
+#pbar{height:100%;background:var(--accent);width:0%;transition:width .35s ease;}
+
+/* ── PAGE WRAPPER ───────────────────────────────────────────────
+   Deliberately never transparent and never animated.
+
+   The old build held #page at opacity:0 and depended on JS adding a
+   class to fade it in, so any script failure produced a permanently
+   blank site. Fading it here would reintroduce that: a transition
+   that never advances (background tab, throttled renderer) leaves
+   the element stuck at its start value.
+
+   #pre is already a full-screen opaque overlay, so it hides the
+   content on its own. The content underneath simply stays visible.
+   ─────────────────────────────────────────────────────────────── */
+#page{
+  position:relative;z-index:3;min-height:100vh;
+  display:flex;flex-direction:column;
+  opacity:1;
+}
+
+/* ── NAV ──────────────────────────────────────────────────────────
+   Scoped to the primary nav on purpose. As a bare `nav` selector this
+   also matched `<nav class="ints">` (the section tiles) and
+   `<nav class="ints">` on the photography page, leaking padding —
+   which double-indented the tile text to 96px against the page's 48px
+   — plus `position:sticky`, `z-index:50` and an opaque background, so
+   the tiles stuck to the top and overlapped the header while
+   scrolling. Keep this selector specific.
+   ──────────────────────────────────────────────────────────────── */
+nav[aria-label="Primary"]{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:1rem;padding:1.25rem var(--pad);border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--bg);z-index:50;
+}
+.nlogo{font-family:var(--serif);font-size:1.05rem;font-weight:400;}
+a.nlogo{color:var(--muted);text-decoration:none;transition:color .2s;}
+a.nlogo:hover{color:var(--text);}
+.nleft{display:flex;align-items:center;gap:1rem;}
+.nsep{color:var(--border);font-size:1.2rem;}
+.nsec{font-family:var(--serif);font-size:1.05rem;}
+.nr{display:flex;gap:1.5rem;align-items:center;list-style:none;}
+.nstatus{display:flex;align-items:center;gap:.55rem;font-size:var(--micro);letter-spacing:.12em;text-transform:uppercase;color:var(--a2);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.js .ndot{animation:pulse 2.5s ease infinite;}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(127,174,134,.5)}
+  70%{box-shadow:0 0 0 7px rgba(127,174,134,0)}
+  100%{box-shadow:0 0 0 0 rgba(127,174,134,0)}
+}
+.nclk{font-size:var(--micro);color:var(--a2);font-variant-numeric:tabular-nums;letter-spacing:.06em;}
+.nloc{font-size:var(--micro);color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.nlink{font-size:var(--micro);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;padding:.35rem 0;}
+.nlink:hover{color:var(--accent);}
+.ndiv{width:1px;height:14px;background:var(--border);}
+
+/* ── HERO (home) ────────────────────────────────────────────────── */
+.hero{padding:4.5rem var(--pad) 3rem;border-bottom:1px solid var(--border);}
+.hmeta{display:flex;justify-content:space-between;gap:1rem;font-size:var(--micro);color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2rem;}
+.hname{font-family:var(--serif);font-size:clamp(4rem,15vw,10rem);font-weight:300;line-height:.88;letter-spacing:-.03em;margin-bottom:2rem;}
+/* line-height .88 makes the line box shorter than the font's em box, and
+   `overflow:hidden` is required to mask the slide-up reveal. Cormorant's
+   capitals do still fit, but the Georgia fallback is taller and would clip if
+   the webfont fails to load. This grows the mask upward only, then pulls it
+   back with a negative margin — no layout shift, and no exposing the text
+   before it slides in from below. */
+.hrow{display:block;overflow:hidden;padding-top:.16em;margin-top:-.16em;}
+.hrow.it{font-style:italic;padding-left:clamp(2rem,7vw,6rem);}
+.hspan{display:block;}
+.js .hspan{transform:translateY(106%);transition:transform .85s cubic-bezier(.16,1,.3,1);}
+.js .hrow.it .hspan{transition-delay:.13s;}
+.js .hrow.vis .hspan{transform:translateY(0);}
+.hline{height:1px;background:linear-gradient(90deg,var(--accent),transparent);width:55%;margin-bottom:2.5rem;}
+.js .hline{width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1) .3s;}
+.js .hline.vis{width:55%;}
+
+.hbot{display:grid;grid-template-columns:1fr auto 1fr;gap:3rem;align-items:end;}
+.hbio{font-size:.9rem;color:var(--a2);line-height:1.85;max-width:36ch;}
+.hbio strong{color:var(--text);font-weight:500;}
+.hstats{display:flex;gap:3rem;justify-content:flex-end;}
+.hstat{display:flex;flex-direction:column;align-items:flex-end;gap:.2rem;}
+.hsn{font-family:var(--serif);font-size:3.2rem;font-weight:300;line-height:1;}
+.hsl{font-size:.7rem;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;text-align:right;}
+
+/* ── PROFILE PHOTO ──────────────────────────────────────────────── */
+.photo-frame{
+  width:170px;position:relative;aspect-ratio:2/3;
+  border:1px solid var(--border);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:.6rem;background:var(--border);
+}
+.photo-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+.pf-rail{position:absolute;top:0;bottom:0;width:18px;display:flex;flex-direction:column;justify-content:space-evenly;align-items:center;background:var(--bg);z-index:2;}
+.pf-rail.l{left:0;border-right:1px solid var(--border);}
+.pf-rail.r{right:0;border-left:1px solid var(--border);}
+.pf-hole{width:7px;height:7px;border-radius:1px;border:1px solid var(--border);}
+.pf-mono{
+  font-family:var(--serif);font-size:4rem;font-weight:300;font-style:italic;
+  color:var(--accent);opacity:.7;position:relative;z-index:1;line-height:1;
+}
+/* The badge text is fixed light-on-dark because it sits over a photo,
+   so it cannot inherit the theme colours. The scrim therefore has to
+   stay genuinely dark across its whole height — a gradient fading to
+   transparent left the upper line sitting on a light backdrop in light
+   mode (and on any bright photo). */
+.pf-badge{
+  position:absolute;bottom:0;left:0;right:0;padding:.55rem .8rem;
+  background:linear-gradient(to top,
+    rgba(0,0,0,.92) 0%,
+    rgba(0,0,0,.82) 65%,
+    rgba(0,0,0,.70) 100%);
+  display:flex;flex-direction:column;gap:.1rem;z-index:3;
+}
+.pf-badge-name{font-family:var(--serif);font-size:.9rem;font-style:italic;color:#ede8df;}
+.pf-badge-loc{font-size:.7rem;color:#c9c3b6;letter-spacing:.12em;text-transform:uppercase;}
+
+/* ── TICKER ─────────────────────────────────────────────────────── */
+.tkr{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.9rem 0;overflow:hidden;}
+.tkri{display:flex;gap:2.5rem;white-space:nowrap;width:max-content;}
+.js .tkri{animation:tkr 30s linear infinite;}
+.tkri:hover{animation-play-state:paused;}
+.ti{font-size:var(--micro);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.tg{color:var(--accent);font-size:.7rem;}
+@keyframes tkr{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTION LINK TILES ─────────────────────────────────────────── */
+.ints{display:flex;border-bottom:1px solid var(--border);}
+.int{
+  flex:1;padding:2rem var(--pad);border-right:1px solid var(--border);
+  position:relative;overflow:hidden;text-decoration:none;color:inherit;display:block;
+}
+.int:last-child{border-right:none;}
+.iswp{position:absolute;inset:0;background:linear-gradient(105deg,transparent,rgba(201,169,110,.06),transparent);transform:translateX(-110%);transition:transform .55s cubic-bezier(.16,1,.3,1);}
+.int:hover .iswp{transform:translateX(110%);}
+.in{font-size:var(--micro);color:var(--muted);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:1rem;}
+/* Scoped to .int deliberately. Unscoped, this `font-size:1.7rem` also hit
+   `.hrow.it` / `.pht-row.it` — where `.it` means "italic line" — and shrank
+   the second line of every big heading from 160px to 27px. That is why
+   "ZAFAR" rendered tiny next to "MOOSA". */
+.int .it{font-family:var(--serif);font-size:1.7rem;font-weight:300;font-style:italic;display:block;transition:color .25s;letter-spacing:-.01em;}
+.int:hover .it,.int:focus-visible .it{color:var(--accent);}
+.isub{display:block;font-size:.76rem;color:var(--a2);margin-top:.55rem;line-height:1.6;max-width:34ch;}
+.iarr{position:absolute;right:2rem;top:2rem;font-size:.8rem;color:var(--accent);opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;}
+.int:hover .iarr,.int:focus-visible .iarr{opacity:1;transform:translateY(0);}
+
+/* ── SECTION HEADER ─────────────────────────────────────────────── */
+.sec-hd{
+  padding:2.5rem var(--pad) 2rem;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;
+}
+.sec-eyebrow{font-size:var(--micro);color:var(--muted);letter-spacing:.18em;text-transform:uppercase;font-weight:400;}
+.sec-title{font-family:var(--serif);font-size:1.5rem;font-weight:300;font-style:italic;letter-spacing:-.01em;}
+
+/* ── WORK EXPERIENCE ────────────────────────────────────────────── */
+.exp-section{border-bottom:1px solid var(--border);}
+.exp-item{
+  display:grid;grid-template-columns:110px 1fr 150px;gap:0 2.5rem;
+  padding:2.5rem var(--pad);border-bottom:1px solid var(--border);
+  align-items:start;position:relative;overflow:hidden;
+}
+.exp-item:last-child{border-bottom:none;}
+.exp-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.exp-item:hover::before{transform:scaleY(1);}
+.exp-item:hover{background:rgba(201,169,110,.03);}
+.exp-date{font-size:.74rem;color:var(--muted);letter-spacing:.08em;line-height:1.9;padding-top:.4rem;}
+.exp-body{display:flex;flex-direction:column;gap:.8rem;}
+.exp-role{font-family:var(--serif);font-size:2rem;font-weight:300;font-style:italic;line-height:1.1;letter-spacing:-.01em;transition:color .2s;}
+.exp-item:hover .exp-role{color:var(--accent);}
+.exp-company{font-size:.82rem;color:var(--text);letter-spacing:.03em;}
+.exp-company span{color:var(--muted);}
+.exp-desc{font-size:.84rem;color:var(--a2);line-height:1.8;max-width:62ch;}
+.exp-desc + .exp-desc{margin-top:-.35rem;}
+.exp-tags{display:flex;flex-wrap:wrap;gap:.4rem;}
+.exp-tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--border);color:var(--muted);transition:border-color .2s,color .2s;}
+.exp-item:hover .exp-tag{border-color:var(--muted);color:var(--a2);}
+.exp-right{display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;}
+.exp-type{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .8rem;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
+
+/* scroll reveal — only when JS is present */
+.js .exp-item,.js .proj{opacity:0;transform:translateX(-16px);transition:opacity .55s ease,transform .55s cubic-bezier(.16,1,.3,1),background .2s;}
+.js .exp-item.vis,.js .proj.vis{opacity:1;transform:translateX(0);}
+
+/* ── TOOLS ──────────────────────────────────────────────────────── */
+.tools-section{border-bottom:1px solid var(--border);}
+.tools-body{padding:3rem var(--pad);display:grid;grid-template-columns:repeat(2,1fr);gap:2.5rem 3rem;}
+.tool-cat{display:flex;flex-direction:column;gap:1rem;}
+.tool-cat-label{font-size:var(--micro);color:var(--muted);letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:.75rem;font-weight:400;}
+.tool-cat-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.tool-chips{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;}
+.chip{
+  font-size:.76rem;letter-spacing:.04em;padding:.4rem .95rem;
+  border:1px solid var(--border);color:var(--a2);
+  position:relative;overflow:hidden;
+}
+.js .chip{opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s;}
+.js .chip.vis{opacity:1;transform:translateY(0);}
+.chip::before{content:'';position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
+.chip:hover::before{transform:translateY(0);}
+.chip span{position:relative;z-index:1;transition:color .25s;}
+.chip:hover span{color:var(--bg);}
+
+/* ── SUBPAGE HEADER ─────────────────────────────────────────────── */
+.ph{padding:4rem var(--pad) 2.5rem;border-bottom:1px solid var(--border);}
+.ph-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.ph-eyebrow{font-size:var(--micro);color:var(--muted);letter-spacing:.16em;text-transform:uppercase;}
+.ph-title{font-family:var(--serif);font-size:clamp(3rem,10vw,7rem);font-weight:300;line-height:.92;letter-spacing:-.03em;margin-bottom:1.5rem;}
+/* Same glyph-clipping guard as .hrow — see the note there. */
+.pht-row{display:block;overflow:hidden;padding-top:.14em;margin-top:-.14em;}
+.pht-row.it{font-style:italic;padding-left:clamp(1.5rem,4vw,3.5rem);}
+.pht-span{display:block;}
+.js .pht-span{transform:translateY(106%);transition:transform .85s cubic-bezier(.16,1,.3,1);}
+.js .pht-row.it .pht-span{transition-delay:.1s;}
+.js .pht-row.vis .pht-span{transform:translateY(0);}
+.ph-line{height:1px;background:linear-gradient(90deg,var(--accent),transparent);width:45%;margin-bottom:1.5rem;}
+.js .ph-line{width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1) .3s;}
+.js .ph-line.vis{width:45%;}
+.ph-desc{font-size:.9rem;color:var(--a2);line-height:1.8;max-width:52ch;}
+
+/* ── PROJECT LIST ───────────────────────────────────────────────── */
+.projects{flex:1;}
+.proj{
+  display:grid;grid-template-columns:72px 1fr 150px;gap:0 2rem;
+  padding:2.5rem var(--pad);border-bottom:1px solid var(--border);
+  align-items:start;position:relative;overflow:hidden;
+}
+.proj::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .35s cubic-bezier(.16,1,.3,1);}
+.proj:hover::before{transform:scaleY(1);}
+.proj:hover{background:rgba(201,169,110,.03);}
+.proj-num{font-size:var(--micro);color:var(--muted);letter-spacing:.14em;padding-top:.4rem;}
+.proj-body{display:flex;flex-direction:column;gap:.9rem;}
+.proj-title{font-family:var(--serif);font-size:2rem;font-weight:300;font-style:italic;line-height:1.1;transition:color .2s;letter-spacing:-.01em;}
+.proj:hover .proj-title{color:var(--accent);}
+.proj-desc{font-size:.84rem;color:var(--a2);line-height:1.8;max-width:62ch;}
+.proj-desc + .proj-desc{margin-top:-.35rem;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem;}
+.tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--border);color:var(--muted);transition:border-color .2s,color .2s;}
+.proj:hover .tag{border-color:var(--muted);color:var(--a2);}
+.proj-right{display:flex;flex-direction:column;gap:.8rem;align-items:flex-end;}
+.proj-year{font-size:.74rem;color:var(--muted);letter-spacing:.1em;padding-top:.4rem;}
+.proj-role{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:.3rem .8rem;white-space:nowrap;}
+
+/* ── PHOTO GALLERY ──────────────────────────────────────────────── */
+.gallery{
+  padding:0 var(--pad) 3rem;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.5rem;
+}
+.shot{margin:0;display:flex;flex-direction:column;gap:.6rem;}
+.shot img{
+  width:100%;height:auto;display:block;
+  background:var(--border);          /* holds the space while loading */
+  border:1px solid var(--border);
+}
+.shot figcaption{font-size:.74rem;color:var(--muted);letter-spacing:.04em;line-height:1.6;}
+@media (max-width:768px){
+  .gallery{grid-template-columns:1fr;gap:1.25rem;padding:0 var(--pad) 2rem;}
+}
+
+/* ── EMPTY / IN-PROGRESS STATE ──────────────────────────────────── */
+.empty{
+  margin:0 var(--pad) 3rem;padding:2.5rem;
+  border:1px solid var(--border);
+  display:flex;flex-direction:column;gap:1rem;align-items:flex-start;
+}
+.empty-eyebrow{font-size:var(--micro);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
+.empty-title{font-family:var(--serif);font-size:1.6rem;font-weight:300;font-style:italic;}
+.empty-body{font-size:.88rem;color:var(--a2);line-height:1.8;max-width:60ch;}
+.empty-cta{
+  font-size:.8rem;letter-spacing:.06em;color:var(--accent);text-decoration:none;
+  border-bottom:1px solid currentColor;padding-bottom:2px;transition:opacity .2s;
+}
+.empty-cta:hover{opacity:.7;}
+
+/* ── FOOTER ─────────────────────────────────────────────────────── */
+footer{
+  padding:1.5rem var(--pad);border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  gap:1rem;flex-wrap:wrap;margin-top:auto;
+}
+footer p{font-size:.76rem;color:var(--muted);}
+footer a{color:var(--muted);text-decoration:none;transition:color .2s;}
+footer a:hover{color:var(--accent);}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width:1000px){
+  .exp-item{grid-template-columns:100px 1fr;}
+  .exp-right{flex-direction:row;align-items:center;grid-column:1/-1;margin-top:1rem;}
+  .proj{grid-template-columns:60px 1fr;}
+  .proj-right{flex-direction:row;align-items:center;grid-column:1/-1;margin-top:.5rem;}
+  .proj-year{padding-top:0;}
+}
+@media (max-width:768px){
+  :root{--pad:1.5rem;}
+  /* The CV and LinkedIn links used to be hidden entirely on mobile,
+     leaving phone visitors with no way to reach the resume. */
+  .nr{gap:1rem;flex-wrap:wrap;justify-content:flex-end;}
+  .nr .nstatus,.nr .ndiv,.nr .nclk,.nr .nloc{display:none;}
+  nav[aria-label="Primary"]{padding:1rem var(--pad);}
+  .hero{padding:2.5rem var(--pad) 2rem;}
+  .hbot{grid-template-columns:1fr;gap:2rem;}
+  .photo-frame{width:130px;}
+  .hstats{justify-content:flex-start;gap:2.5rem;}
+  .hstat{align-items:flex-start;}
+  .hsl{text-align:left;}
+  .ints{flex-direction:column;}
+  .int{border-right:none;border-bottom:1px solid var(--border);padding:1.5rem var(--pad);}
+  .int:last-child{border-bottom:none;}
+  .iarr{right:var(--pad);top:1.5rem;}
+  .sec-hd{padding:2rem var(--pad) 1.5rem;}
+  .exp-item,.proj{grid-template-columns:1fr;padding:1.75rem var(--pad);gap:.6rem;}
+  .exp-date{padding-top:0;}
+  .exp-role,.proj-title{font-size:1.6rem;}
+  .proj-num{display:none;}
+  .tools-body{padding:1.5rem var(--pad);grid-template-columns:1fr;gap:2rem;}
+  .empty{margin:0 var(--pad) 2rem;padding:1.5rem;}
+  footer{flex-direction:column;align-items:flex-start;gap:.5rem;}
+}
+
+/* ── REDUCED MOTION ─────────────────────────────────────────────────
+   The previous build had no reduced-motion handling at all: an
+   infinite film-grain flicker, a scrolling ticker, a pulsing dot and
+   two permanent requestAnimationFrame loops all ran regardless.
+   ─────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  html{scroll-behavior:auto;}
+  #grain,#bg-canvas{display:none;}
+  .js .tkri{animation:none;}
+  .js .hspan,.js .pht-span{transform:none;}
+  .js .hline{width:55%;}
+  .js .ph-line{width:45%;}
+  .js .exp-item,.js .proj,.js .chip{opacity:1;transform:none;}
+  .js.cursor-on body{cursor:auto;}
+  .js.cursor-on #cdot,.js.cursor-on #cring{display:none;}
+}
+
+/* ── FAILSAFE ───────────────────────────────────────────────────────
+   Applied by the inline bootstrap if assets/site.js never ran. Forces
+   every JS-driven element to its final, visible state so a missing or
+   broken script can never leave the page blank or half-drawn.
+   ─────────────────────────────────────────────────────────────────── */
+.failsafe #pre{display:none !important;}
+.failsafe #page{opacity:1 !important;}
+.failsafe .hspan,.failsafe .pht-span{transform:none !important;}
+.failsafe .hline{width:55% !important;}
+.failsafe .ph-line{width:45% !important;}
+.failsafe .exp-item,.failsafe .proj,.failsafe .chip{
+  opacity:1 !important;transform:none !important;
+}
+.failsafe #grain,.failsafe #bg-canvas{display:none;}
+
+/* ── PRINT ──────────────────────────────────────────────────────── */
+@media print{
+  #grain,#bg-canvas,#cdot,#cring,.cm,.tkr,#pre,.skip{display:none !important;}
+  body{background:#fff;color:#000;}
+  nav{position:static;}
+  a{color:#000;}
+  .exp-item,.proj{page-break-inside:avoid;}
+}

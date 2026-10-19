@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found — Moosa Zafar</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#050504" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  /* No preloader and no JS gating on the error page — it should
+     render instantly, whatever state the rest of the site is in. */
+  .nf{flex:1;display:flex;flex-direction:column;justify-content:center;padding:4rem var(--pad);gap:1.5rem;}
+  .nf-code{font-family:var(--serif);font-size:clamp(5rem,18vw,12rem);font-weight:300;line-height:.85;color:var(--accent);}
+  .nf-title{font-family:var(--serif);font-size:1.8rem;font-weight:300;font-style:italic;}
+  .nf-body{font-size:.9rem;color:var(--a2);line-height:1.8;max-width:46ch;}
+  .nf-links{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:.5rem;}
+  .nf-link{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:3px;}
+  .nf-link:hover{opacity:.7;}
+</style>
+</head>
+<body>
+<div id="page">
+  <nav aria-label="Primary">
+    <a href="/" class="nlogo">Moosa Zafar</a>
+    <ul class="nr">
+      <li class="nloc">Edmonton, AB</li>
+    </ul>
+  </nav>
+
+  <main class="nf">
+    <p class="nf-code">404</p>
+    <h1 class="nf-title">That page doesn't exist.</h1>
+    <p class="nf-body">
+      The link may be out of date, or I may have moved something.
+      Everything on the site is one of these:
+    </p>
+    <div class="nf-links">
+      <a class="nf-link" href="/">Home</a>
+      <a class="nf-link" href="/engineering/">Engineering</a>
+      <a class="nf-link" href="/photography/">Photography</a>
+      <a class="nf-link" href="/design/">Design &amp; Making</a>
+      <a class="nf-link" href="/resume.pdf">Resume</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>© <span id="yr">2026</span> Moosa Zafar</p>
+    <p><a href="mailto:moosazafar@gmail.com">moosazafar@gmail.com</a></p>
+  </footer>
+</div>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>

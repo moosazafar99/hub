@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Design &amp; Making — Moosa Zafar</title>
+<meta name="description" content="Design and making by Moosa Zafar — printed parts, fixtures, and physical objects designed and built in Edmonton, Alberta.">
+<link rel="canonical" href="https://moosazafar.com/design/">
+<meta name="theme-color" content="#050504" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Moosa Zafar">
+<meta property="og:url" content="https://moosazafar.com/design/">
+<meta property="og:title" content="Design &amp; Making — Moosa Zafar">
+<meta property="og:description" content="Printed parts, fixtures, and physical objects.">
+<meta property="og:image" content="https://moosazafar.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://moosazafar.com/og.png">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+
+<script>
+  (function () {
+    var d = document.documentElement;
+    d.className += ' js loading';
+    setTimeout(function () {
+      if (!window.__siteReady) {
+        d.classList.remove('loading', 'done');
+        d.classList.add('failsafe');
+      }
+    }, 2500);
+  })();
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="cdot" aria-hidden="true"></div><div id="cring" aria-hidden="true"></div>
+<div class="cm tl" aria-hidden="true"></div><div class="cm tr" aria-hidden="true"></div>
+<div class="cm bl" aria-hidden="true"></div><div class="cm br" aria-hidden="true"></div>
+
+<div id="pre" aria-hidden="true">
+  <p class="plbl">Loading</p>
+  <div id="pbarw"><div id="pbar"></div></div>
+</div>
+
+<div id="page">
+
+  <nav aria-label="Primary">
+    <div class="nleft">
+      <a href="/" class="nlogo">Moosa Zafar</a>
+      <span class="nsep" aria-hidden="true">/</span>
+      <span class="nsec" aria-current="page">Design &amp; Making</span>
+    </div>
+    <ul class="nr">
+      <li><a href="https://www.linkedin.com/in/moosazafar" class="nlink" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+      <li><a href="/resume.pdf" class="nlink">CV ↓</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <header class="ph">
+      <div class="ph-top">
+        <p class="ph-eyebrow">CAD · 3D printing · Fixtures</p>
+        <p class="ph-eyebrow">Edmonton, AB</p>
+      </div>
+      <h1 class="ph-title" aria-label="Design &amp; Making">
+        <span class="pht-row"><span class="pht-span">Design</span></span>
+        <span class="pht-row it"><span class="pht-span">&amp; Making</span></span>
+      </h1>
+      <div class="ph-line" id="phline" aria-hidden="true"></div>
+      <p class="ph-desc">
+        Printed parts, fixtures and physical objects — designed in CAD,
+        then actually made and used.
+      </p>
+    </header>
+
+    <div class="projects">
+      <!-- ══════════════════════════════════════════════════════════
+           ADDING A MAKING PROJECT
+
+           Copy one of the "proj" article blocks from
+           /engineering/index.html — it takes a title, one or two
+           description paragraphs, tags, a year and a role. Delete the
+           .empty block below once the first one is in.
+
+           Photos: put them in /images/design/, export at roughly
+           1600px on the long edge as .webp or .jpg, and always include
+           width, height and alt text.
+           ══════════════════════════════════════════════════════════ -->
+
+      <div class="empty">
+        <p class="empty-eyebrow">In progress</p>
+        <p class="empty-title">Still photographing the work.</p>
+        <p class="empty-body">
+          There's a pile of finished pieces to document here — the write-ups
+          are coming. The engineering section covers the design work that is
+          already online, including the printed UT probe holder.
+        </p>
+        <a class="empty-cta" href="/engineering/">See engineering projects ↗</a>
+      </div>
+    </div>
+
+    <div class="tkr" aria-hidden="true">
+      <div class="tkri" id="tkri"
+           data-items="Design &amp; Making|CAD|3D printing|Edmonton AB|moosazafar.com"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© <span id="yr">2026</span> Moosa Zafar</p>
+    <p>
+      <a href="/">moosazafar.com</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:moosazafar@gmail.com">Email</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/moosazafar" target="_blank" rel="noopener">LinkedIn</a>
+    </p>
+  </footer>
+</div>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

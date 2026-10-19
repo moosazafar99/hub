@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MZ">
+  <rect width="64" height="64" fill="#050504"/>
+  <text x="32" y="44"
+        font-family="Georgia,'Times New Roman',serif"
+        font-size="34" font-style="italic" font-weight="400"
+        fill="#c9a96e" text-anchor="middle">MZ</text>
+</svg>
