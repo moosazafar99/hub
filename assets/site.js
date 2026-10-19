@@ -341,15 +341,28 @@
     var mq = window.matchMedia('(max-width:768px)');
     var raf = null;
 
+    // Lead the text by this much, so the photo has already dissolved
+    // where the type is about to land rather than meeting it exactly.
+    var LEAD = 48;
+
     function update() {
       raf = null;
       if (!root.classList.contains('photo-fade')) return;
-      // Fade over a little more than half the portrait's height. The text
-      // starts crossing it around 55% of the way down, and light-grey type
-      // on a half-opaque light photo is unreadable — so it has to be
-      // nearly gone by then, not halfway.
-      var h = (frame.getBoundingClientRect().height || 1) * 0.55;
-      var t = Math.min(1, Math.max(0, window.scrollY / h));
+
+      var box = frame.getBoundingClientRect();
+      var h = box.height || 1;
+
+      // Drive the wipe off the rising text itself rather than a guessed
+      // scroll distance: the erased height is however far the first line
+      // has climbed into the photo. Self-correcting at any screen size.
+      var riser = $('.hmeta') || $('.hbio');
+      var erased = riser
+        ? (box.bottom - riser.getBoundingClientRect().top) + LEAD
+        : window.scrollY;
+
+      var t = Math.min(1, Math.max(0, erased / h));
+      root.style.setProperty('--photo-wipe', (t * 100).toFixed(2) + '%');
+      // Only used where mask-image is unsupported.
       root.style.setProperty('--photo-fade', String(1 - t));
     }
 
@@ -366,6 +379,7 @@
         // Rotating to landscape or widening past the breakpoint must put
         // the photo back in flow, or it stays pinned on desktop.
         root.classList.remove('photo-fade');
+        root.style.removeProperty('--photo-wipe');
         root.style.removeProperty('--photo-fade');
         window.removeEventListener('scroll', onScroll);
         if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
