@@ -419,17 +419,20 @@ footer a:hover{color:var(--accent);}
   .nr{gap:1rem;flex-wrap:wrap;justify-content:flex-end;}
   .nr .nstatus,.nr .ndiv,.nr .nclk,.nr .nloc{display:none;}
   nav[aria-label="Primary"]{padding:1rem var(--pad);}
-  .hero{padding:2.5rem var(--pad) 2rem;}  /* photo is back in flow here */
+  /* Top gap derived to equal the side gap. Percentages here resolve
+     against the content width, unlike 100vw which also counts a
+     scrollbar and left the top 7px out from the sides. */
+  .hero{padding:calc(var(--pad) + (100% - 1rem) / 4) var(--pad) 2rem;}
   .hbot{grid-template-columns:1fr;gap:2rem;}
   /* Back into normal flow: at this width an absolutely positioned frame
      would sit on top of the name. The matching reserve on .hmeta goes
      with it. */
-  /* Centred, with the gap to each screen edge matching the hero's top
-     padding. .hero already insets everything by --pad, so only the
-     difference comes off the width. Expressed against both values so
-     the three gaps stay equal if either is ever changed. */
+  /* Half the previous size, still centred, still with equal space above
+     it and to each screen edge. The top padding is derived from the
+     photo width rather than fixed, so the three gaps stay equal by
+     construction instead of needing to be re-tuned by hand. */
   .photo-frame{
-    width:calc(100% - 2 * (2.5rem - var(--pad)));
+    width:calc((100% - 2rem) / 2);
     position:static;margin:0 auto 1.5rem;
   }
 
