@@ -353,7 +353,10 @@
     var DRIFT = 0.16;   // how far the photo creeps up per pixel scrolled
     var EASE = 0.16;    // follow factor; lower trails more softly
 
-    var DIM_START = 0.5; // fraction of the run before any dimming begins
+    // Dimming begins once you have scrolled this fraction of the photo's
+    // own height — tied to the image rather than to the run, so it starts
+    // at the same visual point whatever the screen size.
+    var DIM_START_H = 0.5;
 
     var shown = 0;      // eased wipe fraction actually rendered
     var baseTop = 0, baseH = 1;
@@ -399,10 +402,13 @@
         : 0);
       var span = Math.max(1, (baseH + restGap - LEAD_TIGHT) / (1 - DRIFT));
 
-      // Ease-in cubic over the back half: nothing for the first 50%, then
-      // slow at first and accelerating away.
-      var p = Math.min(1, Math.max(0, y / span));
-      var u = p <= DIM_START ? 0 : (p - DIM_START) / (1 - DIM_START);
+      // Nothing until half the photo's height has scrolled past, then an
+      // ease-in cubic to nothing — slow at first, accelerating away, and
+      // finishing with the wipe.
+      var dimFrom = baseH * DIM_START_H;
+      var u = span > dimFrom
+        ? Math.min(1, Math.max(0, (y - dimFrom) / (span - dimFrom)))
+        : (y >= dimFrom ? 1 : 0);
       var dim = 1 - (u * u * u);
 
       root.style.setProperty('--photo-wipe', (shown * 100).toFixed(2) + '%');
