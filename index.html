@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=1.1.7">
+<link rel="stylesheet" href="/assets/site.css?v=1.2.0">
 
 <script>
   /* Bootstrap. Runs before paint so the intro is not a flash of
@@ -44,9 +44,23 @@
   (function () {
     var d = document.documentElement;
     d.className += ' js loading';
+
+    // Pin-and-fade the portrait on phones. Set here rather than in
+    // site.js so the hero reserves the right space on the first paint
+    // instead of jumping once the script lands.
+    try {
+      if (window.matchMedia('(max-width:768px)').matches &&
+          !window.matchMedia('(prefers-reduced-motion:reduce)').matches) {
+        d.classList.add('photo-fade');
+      }
+    } catch (e) { /* no matchMedia: leave the photo in normal flow */ }
+
     setTimeout(function () {
       if (!window.__siteReady) {
         d.classList.remove('loading', 'done');
+        // Without site.js nothing drives the fade, so a pinned photo
+        // would sit behind the whole page at full opacity.
+        d.classList.remove('photo-fade');
         d.classList.add('failsafe');
       }
     }, 2500);
@@ -333,6 +347,6 @@
 </script>
 
 <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
-<script src="/assets/site.js?v=1.1.7" defer></script>
+<script src="/assets/site.js?v=1.2.0" defer></script>
 </body>
 </html>

@@ -413,6 +413,9 @@ footer a:hover{color:var(--accent);}
        and to each screen edge. The photo sizes itself to whatever is
        left, so changing this one value keeps all three gaps equal. */
     --phone-gap:2.5rem;
+    /* Measured: the sticky nav is 54px at every phone width. The fixed
+       portrait is offset by it so it never sits beneath the nav. */
+    --phone-nav:54px;
   }
   /* The CV and LinkedIn links used to be hidden entirely on mobile,
      leaving phone visitors with no way to reach the resume. */
@@ -440,6 +443,33 @@ footer a:hover{color:var(--accent);}
     position:relative;top:auto;right:auto;
     margin:0 auto 1.5rem;
   }
+
+  /* ── PORTRAIT STAYS PUT AND FADES AS THE PAGE SCROLLS OVER IT ────
+     Opt-in via .photo-fade, which the inline bootstrap adds before
+     first paint (no layout jump) and removes if site.js never arrives
+     — otherwise a failed script would leave the photo pinned behind
+     the entire page at full opacity. Skipped under reduced motion.
+     ─────────────────────────────────────────────────────────────── */
+  .photo-fade .photo-frame{
+    position:fixed;
+    top:calc(var(--phone-nav) + var(--phone-gap));
+    left:var(--phone-gap);
+    right:var(--phone-gap);
+    width:auto;margin:0;
+    /* Negative so in-flow text paints over it; #page is the stacking
+       context, so it still sits above the page background. */
+    z-index:-1;
+    opacity:var(--photo-fade, 1);
+    will-change:opacity;
+  }
+  /* 100% reserves gap + photo + gap (the photo is square and spans the
+     viewport less one gap each side, so that sum is the viewport width).
+     The extra 8rem is deliberate: text begins crossing the pinned photo
+     after scrolling just past that reserve, and the fade needs room to
+     finish first — light-grey type on a half-faded light photo is
+     unreadable. 8rem puts the crossover at ~168px, by which point the
+     fade (55% of the photo's height, ~170px) is done. */
+  .photo-fade .hero{padding-top:calc(100% + 8rem);}
 
   /* Phone: the big name sat directly under the portrait and read as if it
      were stamped across it. Hidden visually only — this is the page's <h1>,
