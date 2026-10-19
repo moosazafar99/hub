@@ -424,11 +424,14 @@ footer a:hover{color:var(--accent);}
   /* Back into normal flow: at this width an absolutely positioned frame
      would sit on top of the name. The matching reserve on .hmeta goes
      with it. */
-  /* 70% smaller and centred. At 35px the 9px rails would swallow half
-     the face, so they shrink with it. */
-  .photo-frame{width:35px;position:static;margin:0 auto 1.5rem;}
-  .pf-rail{width:3px;}
-  .pf-hole{width:1px;height:1px;}
+  /* Centred, with the gap to each screen edge matching the hero's top
+     padding. .hero already insets everything by --pad, so only the
+     difference comes off the width. Expressed against both values so
+     the three gaps stay equal if either is ever changed. */
+  .photo-frame{
+    width:calc(100% - 2 * (2.5rem - var(--pad)));
+    position:static;margin:0 auto 1.5rem;
+  }
 
   /* Phone: the big name sat directly under the portrait and read as if it
      were stamped across it. Hidden visually only — this is the page's <h1>,
