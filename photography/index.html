@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Photography — Moosa Zafar</title>
+<meta name="description" content="Photography by Moosa Zafar — film and digital work shot in and around Edmonton, Alberta. The work lives on Instagram at @portraitsbymoosa.">
+<link rel="canonical" href="https://moosazafar.com/photography/">
+<meta name="theme-color" content="#050504" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Moosa Zafar">
+<meta property="og:url" content="https://moosazafar.com/photography/">
+<meta property="og:title" content="Photography — Moosa Zafar">
+<meta property="og:description" content="Film and digital work, mostly Edmonton. The work lives on Instagram.">
+<meta property="og:image" content="https://moosazafar.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://moosazafar.com/og.png">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+
+<script>
+  (function () {
+    var d = document.documentElement;
+    d.className += ' js loading';
+    setTimeout(function () {
+      if (!window.__siteReady) {
+        d.classList.remove('loading', 'done');
+        d.classList.add('failsafe');
+      }
+    }, 2500);
+  })();
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="cdot" aria-hidden="true"></div><div id="cring" aria-hidden="true"></div>
+<div class="cm tl" aria-hidden="true"></div><div class="cm tr" aria-hidden="true"></div>
+<div class="cm bl" aria-hidden="true"></div><div class="cm br" aria-hidden="true"></div>
+
+<div id="pre" aria-hidden="true">
+  <p class="plbl">Loading</p>
+  <div id="pbarw"><div id="pbar"></div></div>
+</div>
+
+<div id="page">
+
+  <nav aria-label="Primary">
+    <div class="nleft">
+      <a href="/" class="nlogo">Moosa Zafar</a>
+      <span class="nsep" aria-hidden="true">/</span>
+      <span class="nsec" aria-current="page">Photography</span>
+    </div>
+    <ul class="nr">
+      <li><a href="mailto:moosazafar@gmail.com" class="nlink">Email ↗</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <header class="ph">
+      <div class="ph-top">
+        <p class="ph-eyebrow">Film · Digital</p>
+        <p class="ph-eyebrow">Edmonton, AB</p>
+      </div>
+      <h1 class="ph-title" aria-label="Photography">
+        <span class="pht-row"><span class="pht-span">Photo</span></span>
+        <span class="pht-row it"><span class="pht-span">graphy</span></span>
+      </h1>
+      <div class="ph-line" id="phline" aria-hidden="true"></div>
+      <p class="ph-desc">
+        Film and digital, mostly shot in and around Edmonton.
+        I post the work as I shoot it — the feed is the portfolio.
+      </p>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         This page intentionally hosts no gallery. The photographs live
+         on Instagram, so there is one job here: send people there.
+
+         TO ADD OR CHANGE AN ACCOUNT
+         Edit the href and the two labels in the tile below. To add a
+         second account, copy the whole <a class="int"> block and bump
+         the number (02, 03...). The tiles size themselves.
+
+         Do not use an embedded Instagram feed widget — it needs a
+         Meta API token, breaks silently when the token expires, and
+         loads third-party tracking on a page that currently has none.
+         ══════════════════════════════════════════════════════════════ -->
+    <nav class="ints" aria-label="Photography accounts">
+      <a class="int" href="https://www.instagram.com/portraitsbymoosa/" target="_blank" rel="noopener me">
+        <span class="iswp" aria-hidden="true"></span>
+        <span class="in">01 · Instagram</span>
+        <span class="it">@portraitsbymoosa</span>
+        <span class="isub">The main feed — film and digital, posted as I shoot.</span>
+        <span class="iarr" aria-hidden="true">↗</span>
+      </a>
+    </nav>
+
+    <div class="empty">
+      <p class="empty-eyebrow">Prints &amp; enquiries</p>
+      <p class="empty-title">Want a shot, or want one taken?</p>
+      <p class="empty-body">
+        Happy to talk about prints, or about shooting something.
+        Email is the most reliable way to reach me.
+      </p>
+      <a class="empty-cta" href="mailto:moosazafar@gmail.com">moosazafar@gmail.com ↗</a>
+    </div>
+
+    <div class="tkr" aria-hidden="true">
+      <div class="tkri" id="tkri"
+           data-items="Photography|Film &amp; digital|35mm|Edmonton AB|moosazafar.com"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© <span id="yr">2026</span> Moosa Zafar</p>
+    <p>
+      <a href="/">moosazafar.com</a>
+      &nbsp;·&nbsp;
+      <a href="/engineering/">Engineering</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:moosazafar@gmail.com">Email</a>
+    </p>
+  </footer>
+</div>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
