@@ -459,17 +459,27 @@ footer a:hover{color:var(--accent);}
     /* Negative so in-flow text paints over it; #page is the stacking
        context, so it still sits above the page background. */
     z-index:-1;
-    opacity:var(--photo-fade, 1);
-    will-change:opacity;
+    /* Dissolves from the bottom up, tracking the rising text: --photo-wipe
+       is the height already erased. Because the wipe stays ahead of the
+       text, the photo is gone wherever type lands, so no extra spacing is
+       needed to keep it readable. The second stop softens the edge. */
+    -webkit-mask-image:linear-gradient(to top,
+      transparent var(--photo-wipe, 0%),
+      #000 calc(var(--photo-wipe, 0%) + 16%));
+    mask-image:linear-gradient(to top,
+      transparent var(--photo-wipe, 0%),
+      #000 calc(var(--photo-wipe, 0%) + 16%));
+    will-change:mask-image, opacity;
   }
-  /* 100% reserves gap + photo + gap (the photo is square and spans the
-     viewport less one gap each side, so that sum is the viewport width).
-     The extra 8rem is deliberate: text begins crossing the pinned photo
-     after scrolling just past that reserve, and the fade needs room to
-     finish first — light-grey type on a half-faded light photo is
-     unreadable. 8rem puts the crossover at ~168px, by which point the
-     fade (55% of the photo's height, ~170px) is done. */
-  .photo-fade .hero{padding-top:calc(100% + 8rem);}
+  /* Without mask support, fall back to dimming the whole photo. */
+  @supports not (mask-image: linear-gradient(#000, #000)){
+    .photo-fade .photo-frame{opacity:var(--photo-fade, 1);}
+  }
+  /* Reserves gap + photo + gap: the photo is square and spans the
+     viewport less one gap each side, so that sum is the viewport width.
+     No extra spacer — the bottom-up wipe keeps the photo clear of the
+     text on its own. */
+  .photo-fade .hero{padding-top:100%;}
 
   /* Phone: the big name sat directly under the portrait and read as if it
      were stamped across it. Hidden visually only — this is the page's <h1>,
