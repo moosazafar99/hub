@@ -469,7 +469,10 @@ footer a:hover{color:var(--accent);}
     mask-image:linear-gradient(to top,
       transparent var(--photo-wipe, 0%),
       #000 calc(var(--photo-wipe, 0%) + 16%));
-    will-change:mask-image, opacity;
+    /* Drifts up as the page scrolls, so the photo is never a frozen
+       plate behind moving text. Driven by JS; defaults to 0. */
+    transform:translate3d(0, var(--photo-shift, 0px), 0);
+    will-change:mask-image, transform, opacity;
   }
   /* Without mask support, fall back to dimming the whole photo. */
   @supports not (mask-image: linear-gradient(#000, #000)){
