@@ -146,14 +146,18 @@ nav[aria-label="Primary"]{
   gap:1rem;padding:1.25rem var(--pad);border-bottom:1px solid var(--border);
   position:sticky;top:0;background:var(--bg);z-index:50;
 }
-.nlogo{font-family:var(--serif);font-size:1.05rem;font-weight:400;}
+/* Nav type runs 20% larger than the equivalents elsewhere on the page.
+   --nav-micro keeps the small caps in step without touching --micro,
+   which sets the eyebrow and tag sizes across the whole site. */
+nav[aria-label="Primary"]{--nav-micro:calc(var(--micro) * 1.2);}
+.nlogo{font-family:var(--serif);font-size:1.26rem;font-weight:400;}
 a.nlogo{color:var(--muted);text-decoration:none;transition:color .2s;}
 a.nlogo:hover{color:var(--text);}
 .nleft{display:flex;align-items:center;gap:1rem;}
 .nsep{color:var(--border);font-size:1.2rem;}
-.nsec{font-family:var(--serif);font-size:1.05rem;}
+.nsec{font-family:var(--serif);font-size:1.26rem;}
 .nr{display:flex;gap:1.5rem;align-items:center;list-style:none;}
-.nstatus{display:flex;align-items:center;gap:.55rem;font-size:var(--micro);letter-spacing:.12em;text-transform:uppercase;color:var(--a2);}
+.nstatus{display:flex;align-items:center;gap:.55rem;font-size:var(--nav-micro);letter-spacing:.12em;text-transform:uppercase;color:var(--a2);}
 .ndot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .js .ndot{animation:pulse 2.5s ease infinite;}
 @keyframes pulse{
@@ -161,9 +165,9 @@ a.nlogo:hover{color:var(--text);}
   70%{box-shadow:0 0 0 7px rgba(127,174,134,0)}
   100%{box-shadow:0 0 0 0 rgba(127,174,134,0)}
 }
-.nclk{font-size:var(--micro);color:var(--a2);font-variant-numeric:tabular-nums;letter-spacing:.06em;}
-.nloc{font-size:var(--micro);color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
-.nlink{font-size:var(--micro);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;padding:.35rem 0;}
+.nclk{font-size:var(--nav-micro);color:var(--a2);font-variant-numeric:tabular-nums;letter-spacing:.06em;}
+.nloc{font-size:var(--nav-micro);color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.nlink{font-size:var(--nav-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;padding:.35rem 0;}
 .nlink:hover{color:var(--accent);}
 .ndiv{width:1px;height:14px;background:var(--border);}
 
@@ -413,9 +417,11 @@ footer a:hover{color:var(--accent);}
        and to each screen edge. The photo sizes itself to whatever is
        left, so changing this one value keeps all three gaps equal. */
     --phone-gap:2.5rem;
-    /* Measured: the sticky nav is 54px at every phone width. The fixed
-       portrait is offset by it so it never sits beneath the nav. */
-    --phone-nav:54px;
+    /* Offsets the pinned portrait so it never sits beneath the sticky
+       nav. This is only the pre-JS default; site.js measures the nav
+       and overwrites it, so changing the nav's type size cannot leave
+       the photo misaligned. */
+    --phone-nav:58px;
   }
   /* The CV and LinkedIn links used to be hidden entirely on mobile,
      leaving phone visitors with no way to reach the resume. */
