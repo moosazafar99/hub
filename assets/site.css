@@ -433,7 +433,13 @@ footer a:hover{color:var(--accent);}
      construction instead of needing to be re-tuned by hand. */
   .photo-frame{
     width:calc((100% - 2rem) / 2);
-    position:static;margin:0 auto 1.5rem;
+    /* relative, NOT static: the <img> inside is position:absolute
+       with inset:0, so the frame has to stay a containing block.
+       As static, the image resolved against .hero instead and painted
+       across the whole hero, covering the tagline, bio and stat.
+       top/right are reset because the desktop rule sets them. */
+    position:relative;top:auto;right:auto;
+    margin:0 auto 1.5rem;
   }
 
   /* Phone: the big name sat directly under the portrait and read as if it
