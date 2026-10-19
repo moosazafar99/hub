@@ -86,14 +86,39 @@
   <main id="main">
 
     <section class="hero" aria-labelledby="hname">
+      <!-- ── PROFILE PHOTO ─────────────────────────────────────────
+           Pinned to the hero's top-right corner (see .photo-frame in
+           site.css). It returns to normal flow under 768px, where an
+           absolutely positioned frame would sit on top of the name.
+
+           The frame is square because the photograph is square and is
+           used uncropped — a 2:3 frame would make object-fit:cover
+           shave the sides off.
+           ───────────────────────────────────────────────────────── -->
+      <div class="photo-frame">
+        <div class="pf-rail l" aria-hidden="true">
+          <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
+          <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
+        </div>
+        <div class="pf-rail r" aria-hidden="true">
+          <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
+          <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
+        </div>
+
+        <picture>
+          <source srcset="/images/profile.webp" type="image/webp">
+          <img src="/images/profile.jpg" alt="Moosa Zafar"
+               width="800" height="800" fetchpriority="high" decoding="async">
+        </picture>
+      </div>
+
       <p class="hmeta">
         <span>Engineer · Photographer · Maker</span>
         <span id="dstr"></span>
       </p>
 
       <h1 class="hname" id="hname" aria-label="Moosa Zafar">
-        <span class="hrow"><span class="hspan">MOOSA</span></span>
-        <span class="hrow it"><span class="hspan">ZAFAR</span></span>
+        <span class="hrow"><span class="hspan">MOOSA <em>ZAFAR</em></span></span>
       </h1>
       <div class="hline" id="hline" aria-hidden="true"></div>
 
@@ -104,30 +129,6 @@
           Before that, eighteen months inspecting steel bridges and sign structures.
           I tend to build the tool when the spreadsheet stops being enough.
         </p>
-
-        <!-- ── PROFILE PHOTO ───────────────────────────────────────
-             To use a real photo: save it as images/profile.jpg, then
-             uncomment the <img> line below and delete the .pf-mono div.
-             Keep the alt text.
-             ──────────────────────────────────────────────────────── -->
-        <div class="photo-frame">
-          <div class="pf-rail l" aria-hidden="true">
-            <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
-            <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
-          </div>
-          <div class="pf-rail r" aria-hidden="true">
-            <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
-            <div class="pf-hole"></div><div class="pf-hole"></div><div class="pf-hole"></div>
-          </div>
-
-          <!-- <img src="/images/profile.jpg" alt="Portrait of Moosa Zafar" width="170" height="255"> -->
-          <p class="pf-mono" aria-hidden="true">MZ</p>
-
-          <div class="pf-badge">
-            <span class="pf-badge-name">Moosa Zafar</span>
-            <span class="pf-badge-loc">Edmonton · AB</span>
-          </div>
-        </div>
 
         <div class="hstats">
           <div class="hstat">
