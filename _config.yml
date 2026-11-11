@@ -1,0 +1,8 @@
+# GitHub Pages builds this repo with Jekyll. Nothing here is templated; this
+# file exists only to keep working files out of the published site.
+exclude:
+  - README.md
+  - tools
+  - shots
+  - images/README.txt
+  - images/design/README.txt

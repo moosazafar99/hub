@@ -468,13 +468,16 @@ footer a:hover{color:var(--accent);}
     /* Dissolves from the bottom up, tracking the rising text: --photo-wipe
        is the height already erased. Because the wipe stays ahead of the
        text, the photo is gone wherever type lands, so no extra spacing is
-       needed to keep it readable. The second stop softens the edge. */
+       needed to keep it readable. The second stop softens the edge by
+       --photo-soft, which is 0 at rest and grows as the wipe starts: a
+       fixed 16% left the bottom of the photo washed out before any
+       scrolling had happened. */
     -webkit-mask-image:linear-gradient(to top,
       transparent var(--photo-wipe, 0%),
-      #000 calc(var(--photo-wipe, 0%) + 16%));
+      #000 calc(var(--photo-wipe, 0%) + var(--photo-soft, 0%)));
     mask-image:linear-gradient(to top,
       transparent var(--photo-wipe, 0%),
-      #000 calc(var(--photo-wipe, 0%) + 16%));
+      #000 calc(var(--photo-wipe, 0%) + var(--photo-soft, 0%)));
     /* Drifts up as the page scrolls, so the photo is never a frozen
        plate behind moving text. Driven by JS; defaults to 0. */
     transform:translate3d(0, var(--photo-shift, 0px), 0);

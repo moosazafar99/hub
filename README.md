@@ -11,7 +11,7 @@ design/               honest "in progress" state
 404.html              GitHub Pages serves this automatically on bad URLs
 assets/site.css       ALL styling for every page
 assets/site.js        ALL behaviour for every page
-resume.pdf            generated from Muhammad_Moosa_Zafar_Resume_MEP-2.docx
+Moosa-Zafar-Resume.pdf            generated from Muhammad_Moosa_Zafar_Resume_MEP-2.docx
 og.png                1200x630 link-preview card
 favicon.svg           browser tab icon
 sitemap.xml           lists the 4 pages for search engines
@@ -124,7 +124,7 @@ the expected trade-off of an unlinked page.
       uncomment the `<img>` line in `index.html` and delete the `.pf-mono`
       monogram `<div>` above it. Until then the frame shows an "MZ" monogram.
 - [ ] **Design & Making projects.** Same pattern as the engineering page.
-- [ ] **Re-run `resume.pdf`** whenever the source `.docx` changes — the copy
+- [ ] **Re-run `Moosa-Zafar-Resume.pdf`** whenever the source `.docx` changes — the copy
       here is a snapshot, not a live link.
 - [ ] Optionally submit `https://moosazafar.com/sitemap.xml` in Google Search
       Console so the pages get indexed sooner.

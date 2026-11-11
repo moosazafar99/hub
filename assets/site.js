@@ -393,10 +393,14 @@
       var lead = LEAD_TIGHT +
         (LEAD_OPEN - LEAD_TIGHT) * Math.max(0, 1 - y / LEAD_CLOSE);
 
-      // Live rect, so the drift is already accounted for.
-      var box = frame.getBoundingClientRect();
+      // The frame's bottom edge for THIS scroll position, derived from the
+      // measured base plus the drift about to be applied. Reading the live
+      // rect instead returns last frame's drift, which is harmless while
+      // scrolling smoothly but wrong after a jump (reload mid-page, jump to
+      // top) — enough to leave type sitting on the photo.
+      var bottom = baseTop + baseH - y * DRIFT;
       var erased = riser
-        ? box.bottom - (riser.getBoundingClientRect().top - lead)
+        ? bottom - (riser.getBoundingClientRect().top - lead)
         : y;
 
       var target = Math.min(1, Math.max(0, erased / baseH));
@@ -427,6 +431,10 @@
       var dim = 1 - Math.pow(u, DIM_POWER);
 
       root.style.setProperty('--photo-wipe', (shown * 100).toFixed(2) + '%');
+      // Soft edge ramps in over the first 10% of the wipe, so the photo is
+      // crisp to its bottom edge while the page is at rest.
+      root.style.setProperty(
+        '--photo-soft', (16 * Math.min(1, shown / 0.1)).toFixed(2) + '%');
       root.style.setProperty('--photo-shift', (-y * DRIFT).toFixed(1) + 'px');
       root.style.setProperty('--photo-dim', dim.toFixed(3));
       // No mask support: opacity has to carry the dissolve as well.
@@ -451,6 +459,7 @@
         // the photo back in flow, or it stays pinned on desktop.
         root.classList.remove('photo-fade');
         root.style.removeProperty('--photo-wipe');
+        root.style.removeProperty('--photo-soft');
         root.style.removeProperty('--photo-shift');
         root.style.removeProperty('--photo-dim');
         root.style.removeProperty('--photo-fade');
