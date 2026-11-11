@@ -520,4 +520,67 @@
       });
     });
   });
+
+  /* ── SCREENSHOT POPUP ─────────────────────────────────────────
+     A project row carrying data-shot opens that image in a modal
+     <dialog>. Built on first use, so the image is not downloaded by
+     people who never open it. Escape, the Close button, or a click
+     anywhere outside the image closes it.
+     ──────────────────────────────────────────────────────────── */
+  safe('screenshot popup', function () {
+    var rows = $$('.proj[data-shot]');
+    if (!rows.length || !window.HTMLDialogElement) {
+      $$('.proj-open').forEach(function (el) { el.style.display = 'none'; });
+      rows.forEach(function (el) { el.classList.remove('has-shot'); });
+      return;
+    }
+    var dlg = null, img = null, cap = null, opener = null;
+
+    function build() {
+      dlg = document.createElement('dialog');
+      dlg.className = 'shot-dlg';
+      img = document.createElement('img');
+      var bar = document.createElement('div');
+      bar.className = 'shot-bar';
+      cap = document.createElement('span');
+      var close = document.createElement('button');
+      close.type = 'button';
+      close.className = 'shot-close';
+      close.textContent = 'Close';
+      bar.appendChild(cap);
+      bar.appendChild(close);
+      dlg.appendChild(img);
+      dlg.appendChild(bar);
+      document.body.appendChild(dlg);
+      dlg.addEventListener('click', function (e) {
+        if (e.target === img || e.target === cap || e.target === bar) return;
+        dlg.close();
+      });
+      dlg.addEventListener('close', function () {
+        if (opener && opener.focus) opener.focus();
+        opener = null;
+      });
+    }
+
+    function open(row, from) {
+      if (!dlg) build();
+      img.src = row.getAttribute('data-shot');
+      img.width = +row.getAttribute('data-shot-w') || 0;
+      img.height = +row.getAttribute('data-shot-h') || 0;
+      img.alt = row.getAttribute('data-shot-alt') || '';
+      cap.textContent = row.getAttribute('data-shot-cap') || '';
+      dlg.setAttribute('aria-label', cap.textContent || 'Screenshot');
+      opener = from;
+      dlg.showModal();
+    }
+
+    rows.forEach(function (row) {
+      var btn = $('.shot-btn', row);
+      row.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('a')) return;
+        if (window.getSelection && String(window.getSelection())) return;
+        open(row, btn);
+      });
+    });
+  });
 })();

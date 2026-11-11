@@ -115,7 +115,9 @@
         </div>
       </article>
 
-      <article class="proj">
+      <article class="proj has-shot" data-shot="/images/esp-calculator.webp" data-shot-w="2000" data-shot-h="1300"
+               data-shot-alt="The calculator window: a list of duct system components on the left, a tree of fitting types in the middle, and the calculated velocity, loss coefficient and pressure drop for a round mitered elbow on the right."
+               data-shot-cap="HVAC Static Pressure Calculator, version 5">
         <p class="proj-num">02</p>
         <div class="proj-body">
           <h2 class="proj-title">HVAC ESP Calculator</h2>
@@ -131,11 +133,9 @@
             Excel with the job and checker fields filled in. Packaged as a standalone
             executable and handed to colleagues.
           </p>
-          <figure class="proj-shot">
-            <img src="/images/esp-calculator.webp" width="2000" height="1300" loading="lazy" decoding="async"
-                 alt="The calculator window: a list of duct system components on the left, a tree of fitting types in the middle, and the calculated velocity, loss coefficient and pressure drop for a round mitered elbow on the right.">
-            <figcaption>Version 5 — fitting picker, component editor and results.</figcaption>
-          </figure>
+          <p class="proj-open">
+            <button type="button" class="shot-btn">View the calculator <span aria-hidden="true">↗</span></button>
+          </p>
           <ul class="proj-tags">
             <li class="tag">Python</li>
             <li class="tag">Tkinter</li>
@@ -157,7 +157,7 @@
             A set of Excel tools, built with UserForms and VBA, for capturing bridge
             and sign-structure inspection measurements in the field and turning them
             into reports and inventories without retyping. Used across an inspection
-            program of more than 300 overhead sign structures.
+            program of 350+ overhead sign structures.
           </p>
           <p class="proj-desc">
             Later reworked the measurement tool for a multi-year bridge inspection so

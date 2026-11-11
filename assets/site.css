@@ -362,11 +362,24 @@ a.nlogo:hover{color:var(--text);}
 .proj:hover .proj-title{color:var(--accent);}
 .proj-desc{font-size:.84rem;color:var(--a2);line-height:1.8;max-width:62ch;}
 .proj-desc + .proj-desc{margin-top:-.35rem;}
-/* Screenshot inside a project. The app is a light Windows UI on a dark page,
-   so it gets a hairline frame and is capped rather than filling the column. */
-.proj-shot{margin:.6rem 0 .3rem;max-width:720px;}
-.proj-shot img{display:block;width:100%;height:auto;border:1px solid var(--border);}
-.proj-shot figcaption{margin-top:.6rem;font-size:.7rem;letter-spacing:.08em;color:var(--muted);}
+/* ── SCREENSHOT POPUP ───────────────────────────────────────────
+   A project with data-shot opens its screenshot in a <dialog>. The
+   whole row is the click target; the button inside it is what keyboard
+   and screen-reader users get. Without JS the button stays hidden and
+   nothing looks clickable.
+   ─────────────────────────────────────────────────────────────── */
+.proj-open{display:none;}
+.js .proj-open{display:block;}
+.js .proj.has-shot{cursor:zoom-in;}
+.shot-btn{font:inherit;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:none;border:0;border-bottom:1px solid currentColor;padding:0 0 3px;cursor:inherit;}
+.shot-btn:focus-visible{outline:1px solid var(--accent);outline-offset:4px;}
+.shot-dlg{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:1.5rem;border:0;background:transparent;color:var(--text);cursor:zoom-out;overflow:auto;}
+.shot-dlg[open]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9rem;}
+.shot-dlg::backdrop{background:rgba(0,0,0,.88);}
+.shot-dlg img{display:block;max-width:min(100%,1400px);max-height:calc(100% - 4rem);width:auto;height:auto;border:1px solid var(--border);cursor:default;}
+.shot-bar{display:flex;align-items:center;gap:1.5rem;font-size:.72rem;letter-spacing:.1em;color:var(--a2);cursor:default;}
+.shot-close{font:inherit;letter-spacing:.14em;text-transform:uppercase;color:var(--text);background:none;border:1px solid var(--border);padding:.45rem .9rem;cursor:pointer;}
+.shot-close:hover,.shot-close:focus-visible{border-color:var(--accent);color:var(--accent);outline:none;}
 .proj-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem;list-style:none;}
 .tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--border);color:var(--muted);transition:border-color .2s,color .2s;}
 .proj:hover .tag{border-color:var(--muted);color:var(--a2);}
