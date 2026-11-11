@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Engineering — Moosa Zafar</title>
-<meta name="description" content="Engineering projects by Moosa Zafar: an HVAC external static pressure calculator built in Python, and a spring-actuated magnetic ultrasonic probe holder for pipe scanning.">
+<meta name="description" content="Engineering projects by Moosa Zafar: a magnetic ultrasonic probe holder for pipe scanning, an HVAC external static pressure calculator, and Excel VBA tools for bridge inspection data.">
 <link rel="canonical" href="https://moosazafar.com/engineering/">
 <meta name="theme-color" content="#050504" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f2efe8" media="(prefers-color-scheme: light)">
@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=1.3.5">
+<link rel="stylesheet" href="/assets/site.css?v=1.4.0">
 
 <script>
   (function () {
@@ -72,11 +72,10 @@
     <header class="ph">
       <div class="ph-top">
         <p class="ph-eyebrow">Tools · Hardware · Systems</p>
-        <p class="ph-eyebrow">2 projects</p>
+        <p class="ph-eyebrow">3 projects</p>
       </div>
-      <h1 class="ph-title" aria-label="Engineering">
-        <span class="pht-row"><span class="pht-span">Engi</span></span>
-        <span class="pht-row it"><span class="pht-span">neering</span></span>
+      <h1 class="ph-title">
+        <span class="pht-row"><span class="pht-span">Engineering</span></span>
       </h1>
       <div class="ph-line" id="phline" aria-hidden="true"></div>
       <p class="ph-desc">
@@ -144,6 +143,35 @@
         </div>
       </article>
 
+      <article class="proj">
+        <p class="proj-num">03</p>
+        <div class="proj-body">
+          <h2 class="proj-title">Bridge Inspection Data Tools</h2>
+          <p class="proj-desc">
+            A set of Excel tools, built with UserForms and VBA, for capturing bridge
+            and sign-structure inspection measurements in the field and turning them
+            into reports and inventories without retyping. Used across an inspection
+            program of more than 300 overhead sign structures.
+          </p>
+          <p class="proj-desc">
+            Later reworked the measurement tool for a multi-year bridge inspection so
+            that it keeps earlier years' readings, recalls each measurement location
+            correctly, and cannot silently drop data — then handed it to a second
+            user to stress-test before it was relied on.
+          </p>
+          <ul class="proj-tags">
+            <li class="tag">Excel VBA</li>
+            <li class="tag">UserForms</li>
+            <li class="tag">Data validation</li>
+            <li class="tag">Inspection</li>
+          </ul>
+        </div>
+        <div class="proj-right">
+          <p class="proj-year">2023 – 2026</p>
+          <p class="proj-role">At AECOM</p>
+        </div>
+      </article>
+
     </div>
 
     <div class="tkr" aria-hidden="true">
@@ -165,6 +193,6 @@
 </div>
 
 <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
-<script src="/assets/site.js?v=1.3.5" defer></script>
+<script src="/assets/site.js?v=1.4.0" defer></script>
 </body>
 </html>
