@@ -126,14 +126,20 @@
             workflow I was using daily.
           </p>
           <p class="proj-desc">
-            Built in SMACNA fitting loss coefficients and velocity pressure tables so the
-            outputs stay code-compliant, then packaged it as a standalone executable and
-            handed it to colleagues.
+            Each fitting is picked from a tree of ASHRAE fitting types, so every loss
+            coefficient traces back to a published fitting number. The run exports to
+            Excel with the job and checker fields filled in. Packaged as a standalone
+            executable and handed to colleagues.
           </p>
+          <figure class="proj-shot">
+            <img src="/images/esp-calculator.webp" width="2000" height="1300" loading="lazy" decoding="async"
+                 alt="The calculator window: a list of duct system components on the left, a tree of fitting types in the middle, and the calculated velocity, loss coefficient and pressure drop for a round mitered elbow on the right.">
+            <figcaption>Version 5 — fitting picker, component editor and results.</figcaption>
+          </figure>
           <ul class="proj-tags">
             <li class="tag">Python</li>
             <li class="tag">Tkinter</li>
-            <li class="tag">SMACNA</li>
+            <li class="tag">ASHRAE fittings</li>
             <li class="tag">HVAC</li>
           </ul>
         </div>

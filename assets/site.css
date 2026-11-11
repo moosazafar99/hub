@@ -362,6 +362,11 @@ a.nlogo:hover{color:var(--text);}
 .proj:hover .proj-title{color:var(--accent);}
 .proj-desc{font-size:.84rem;color:var(--a2);line-height:1.8;max-width:62ch;}
 .proj-desc + .proj-desc{margin-top:-.35rem;}
+/* Screenshot inside a project. The app is a light Windows UI on a dark page,
+   so it gets a hairline frame and is capped rather than filling the column. */
+.proj-shot{margin:.6rem 0 .3rem;max-width:720px;}
+.proj-shot img{display:block;width:100%;height:auto;border:1px solid var(--border);}
+.proj-shot figcaption{margin-top:.6rem;font-size:.7rem;letter-spacing:.08em;color:var(--muted);}
 .proj-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem;list-style:none;}
 .tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--border);color:var(--muted);transition:border-color .2s,color .2s;}
 .proj:hover .tag{border-color:var(--muted);color:var(--a2);}
