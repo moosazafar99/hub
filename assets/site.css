@@ -375,11 +375,19 @@ a.nlogo:hover{color:var(--text);}
 .shot-btn:focus-visible{outline:1px solid var(--accent);outline-offset:4px;}
 .shot-dlg{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:1.5rem;border:0;background:transparent;color:var(--text);cursor:zoom-out;overflow:auto;}
 .shot-dlg[open]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9rem;}
-.shot-dlg::backdrop{background:rgba(0,0,0,.88);}
+/* The popup is always dark, whichever theme the page is in: pin the dark
+   tokens here so its caption and buttons stay readable on the backdrop. */
+.shot-dlg{--text:#ede8df;--muted:#8a8478;--a2:#a39c8e;--border:#4a463e;--accent:#c9a96e;}
+.shot-dlg::backdrop{background:rgba(0,0,0,.92);}
 .shot-dlg img{display:block;max-width:min(100%,1400px);max-height:calc(100% - 4rem);width:auto;height:auto;border:1px solid var(--border);cursor:default;}
 .shot-bar{display:flex;align-items:center;gap:1.5rem;font-size:.72rem;letter-spacing:.1em;color:var(--a2);cursor:default;}
-.shot-close{font:inherit;letter-spacing:.14em;text-transform:uppercase;color:var(--text);background:none;border:1px solid var(--border);padding:.45rem .9rem;cursor:pointer;}
-.shot-close:hover,.shot-close:focus-visible{border-color:var(--accent);color:var(--accent);outline:none;}
+.shot-bar{flex-wrap:wrap;justify-content:center;row-gap:.6rem;}
+.shot-count{color:var(--muted);font-variant-numeric:tabular-nums;}
+.shot-close,.shot-nav{font:inherit;letter-spacing:.14em;text-transform:uppercase;color:var(--text);background:none;border:1px solid var(--border);padding:.45rem .9rem;cursor:pointer;}
+.shot-close:hover,.shot-close:focus-visible,.shot-nav:hover,.shot-nav:focus-visible{border-color:var(--accent);color:var(--accent);outline:none;}
+.shot-nav[hidden],.shot-count[hidden]{display:none;}
+.shot-dlg.many img{cursor:pointer;}
+@media (max-width:600px){ .shot-cap{flex-basis:100%;text-align:center;} }
 .proj-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.2rem;list-style:none;}
 .tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--border);color:var(--muted);transition:border-color .2s,color .2s;}
 .proj:hover .tag{border-color:var(--muted);color:var(--a2);}

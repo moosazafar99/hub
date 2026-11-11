@@ -522,10 +522,12 @@
   });
 
   /* ── SCREENSHOT POPUP ─────────────────────────────────────────
-     A project row carrying data-shot opens that image in a modal
-     <dialog>. Built on first use, so the image is not downloaded by
-     people who never open it. Escape, the Close button, or a click
-     anywhere outside the image closes it.
+     A project row carrying data-shot opens its image(s) in a modal
+     <dialog>. Several images are given as "|"-separated lists in
+     data-shot, -w, -h, -alt and -cap; then Prev / Next, the arrow
+     keys, or a click on the image step through them. Built on first
+     use, so nothing is downloaded by people who never open it.
+     Escape, Close, or a click outside the image closes it.
      ──────────────────────────────────────────────────────────── */
   safe('screenshot popup', function () {
     var rows = $$('.proj[data-shot]');
@@ -534,7 +536,32 @@
       rows.forEach(function (el) { el.classList.remove('has-shot'); });
       return;
     }
-    var dlg = null, img = null, cap = null, opener = null;
+    var dlg = null, img = null, cap = null, count = null, prev = null, next = null;
+    var opener = null, shots = [], at = 0;
+
+    function list(row, name) {
+      return (row.getAttribute(name) || '').split('|').map(function (v) { return v.trim(); });
+    }
+
+    function button(label, cls) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = cls;
+      b.textContent = label;
+      return b;
+    }
+
+    function show(i) {
+      at = (i + shots.length) % shots.length;
+      var sh = shots[at];
+      img.src = sh.src;
+      img.width = sh.w;
+      img.height = sh.h;
+      img.alt = sh.alt;
+      cap.textContent = sh.cap;
+      count.textContent = shots.length > 1 ? (at + 1) + ' / ' + shots.length : '';
+      dlg.setAttribute('aria-label', sh.cap || 'Screenshot');
+    }
 
     function build() {
       dlg = document.createElement('dialog');
@@ -543,18 +570,28 @@
       var bar = document.createElement('div');
       bar.className = 'shot-bar';
       cap = document.createElement('span');
-      var close = document.createElement('button');
-      close.type = 'button';
-      close.className = 'shot-close';
-      close.textContent = 'Close';
-      bar.appendChild(cap);
-      bar.appendChild(close);
+      cap.className = 'shot-cap';
+      count = document.createElement('span');
+      count.className = 'shot-count';
+      prev = button('Prev', 'shot-nav');
+      next = button('Next', 'shot-nav');
+      var close = button('Close', 'shot-close');
+      [cap, count, prev, next, close].forEach(function (el) { bar.appendChild(el); });
       dlg.appendChild(img);
       dlg.appendChild(bar);
       document.body.appendChild(dlg);
+
+      prev.addEventListener('click', function (e) { e.stopPropagation(); show(at - 1); });
+      next.addEventListener('click', function (e) { e.stopPropagation(); show(at + 1); });
       dlg.addEventListener('click', function (e) {
-        if (e.target === img || e.target === cap || e.target === bar) return;
+        if (e.target === img) { if (shots.length > 1) show(at + 1); return; }
+        if (bar.contains(e.target) && e.target !== close) return;
         dlg.close();
+      });
+      dlg.addEventListener('keydown', function (e) {
+        if (shots.length < 2) return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); }
       });
       dlg.addEventListener('close', function () {
         if (opener && opener.focus) opener.focus();
@@ -564,14 +601,19 @@
 
     function open(row, from) {
       if (!dlg) build();
-      img.src = row.getAttribute('data-shot');
-      img.width = +row.getAttribute('data-shot-w') || 0;
-      img.height = +row.getAttribute('data-shot-h') || 0;
-      img.alt = row.getAttribute('data-shot-alt') || '';
-      cap.textContent = row.getAttribute('data-shot-cap') || '';
-      dlg.setAttribute('aria-label', cap.textContent || 'Screenshot');
+      var src = list(row, 'data-shot'), w = list(row, 'data-shot-w'), h = list(row, 'data-shot-h');
+      var alt = list(row, 'data-shot-alt'), caps = list(row, 'data-shot-cap');
+      shots = src.filter(Boolean).map(function (u, i) {
+        return { src: u, w: +w[i] || 0, h: +h[i] || 0, alt: alt[i] || '', cap: caps[i] || caps[0] || '' };
+      });
+      if (!shots.length) return;
+      var many = shots.length > 1;
+      prev.hidden = next.hidden = count.hidden = !many;
+      dlg.classList.toggle('many', many);
       opener = from;
+      show(0);
       dlg.showModal();
+      if (many) next.focus();
     }
 
     rows.forEach(function (row) {
